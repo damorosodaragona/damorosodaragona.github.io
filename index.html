@@ -8,6 +8,8 @@
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Academic icon (free version)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
@@ -50,7 +52,8 @@
             </div>
             <p class="lead mb-5"><i>The only way to do great work is to love what you do.</i></p>
             <div class="social-icons">
-                <a class="social-icon" href="https://www.linkedin.com/in/dario-amoroso-d-aragona/"><i class="fab fa-linkedin-in"></i></a>
+                <a class="social-icon" href="https://www.linkedin.com/in/dario-amoroso-d-aragona/" target="_blank"><i class="fab fa-linkedin-in fa-bounce" style="--fa-animation-iteration-count: 4"></i></a>
+                <a class="social-icon" href="https://scholar.google.com/citations?user=l-gOe7cAAAAJ&amp;hl=en" target="_blank"><i class="ai ai-google-scholar fa-bounce" style="--fa-animation-iteration-count: 4"></i></a>
                 <!--<a class="social-icon" href="#!"><i class="fab fa-github"></i></a>
 <a class="social-icon" href="#!"><i class="fab fa-twitter"></i></a>
 <a class="social-icon" href="#!"><i class="fab fa-facebook-f"></i></a>-->
@@ -59,31 +62,105 @@
     </section>
     <hr class="m-0" />
     <!-- Education-->
+    <!-- Experience-->
     <section class="resume-section" id="education">
         <div class="resume-section-content">
             <h2 class="mb-5">Education</h2>
-            <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                <div class="flex-grow-1">
-                    <h3 class="mb-0">University of Bari</h3>
-                    <div class="subheading mb-3">Bachelor in Information and Technology</div>
-                    <div>Information and Technolgy fo software production</div>
-                    <!-- <p>GPA: 3.23</p>-->
-                </div>
-                <div class="flex-shrink-0"><span class="text-primary">September 2014 - March 2018</span></div>
-            </div>
-            <div class="d-flex flex-column flex-md-row justify-content-between">
-                <div class="flex-grow-1">
-                    <h3 class="mb-0">University of Bari</h3>
-                    <div class="subheading mb-3">Master in Computer Science</div>
-                    <div>Computer Science</div>
-                    <!-- <p>GPA: 3.56</p>-->
-                </div>
-                <div class="flex-shrink-0"><span class="text-primary">August 2002 - May 2006</span></div>
-            </div>
+            <ul class="resume-experiences">
+                <li class="blue">
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <h3 class="wherebold mb-0">Ph.D</h3>
+                            <h3 class="what blue">until now</h3>
+                            <div class="subheading mb-3">Tampere University</div>
+                            <div>Sofwtare Engineering</div>
+                            <!-- <p>GPA: 3.56</p>-->
+                            <div class="when">January 2022 -</div>
+                        </div>
+                    </div>
+                </li>
+                <li class="green">
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-0">Master degree in Computer Science</h3>
+                            <div class="subheading mb-3">University of Bari Aldo Moro</div>
+                            <div>Computer Science</div>
+                            <!-- <p>GPA: 3.56</p>-->
+                            <div class="when">September 2019 - March 2022</div>
+                        </div>
+                    </div>
+                </li>
+                <li class="green">
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-0">Bachelor degree in Information and Technology</h3>
+                            <div class="subheading mb-3">University of Bari Aldo Moro</div>
+                            <div>Information and Technolgy for software production</div>
+                            <!-- <p>GPA: 3.23</p>-->
+                            <div class="when">September 2014 - March 2018</div>
+                        </div>
+                    </div>
+                </li>
+                <!--ORIGINALLY
+<li class="pink">
+<div class="where">New York Times</div>
+<h3 class="what pink">Senior Online Editor</h3>
+<div class="when">2012 - Present</div>
+<p class="description">Jelly-o pie chocolate cake...</p>
+<h3 class="what pink">Senior Online Editor</h3>
+</li>-->
+            </ul>
         </div>
-    </section>
-    <hr class="m-0" />
-    <!--Experience
+        <!--OLD IMPLEMENTATION
+</section>
+<section class="resume-section" id="education">
+<div class="resume-section-content">
+<h2 class="mb-5">Education</h2>
+<h3 class="mb-5">ORIGINAL</h3>
+<ul class="resume-experiences">
+<li class="pink">
+<div class="where">University of Bari Aldo Moro</div>
+<div class="when">September 2014 - March 2019</div>
+<p class="description">Bachelor in Information and Technology</p>
+</li>
+<li class="pink">
+<div class="where">University of Bari Aldo Moro</div>
+<div class="when">September 2019 - March 2022</div>
+<p class="description">Information and Technolgy for software production.</p>
+</li>
+<li class="pink">
+<div class="where">Tampere University</div>
+<h3 class="what pink">until nowr</h3>
+<div class="when">2022 - Present</div>
+<p class="description">Ph.D</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="resume-section" id="education">
+<div class="resume-section-content">
+<h2 class="mb-5">Education</h2>
+<h3 class="mb-5">IMPLEMENTATION</h3>
+<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+<div class="flex-grow-1">
+<h3 class="mb-0">University of Bari</h3>
+<div class="subheading mb-3">Bachelor in Information and Technology</div>
+<div>Information and Technolgy for software production</div>
+</div>
+<div class="flex-shrink-0"><span class="text-primary">September 2014 - March 2019</span></div>
+</div>
+<div class="d-flex flex-column flex-md-row justify-content-between">
+<div class="flex-grow-1">
+<h3 class="mb-0">University of Bari</h3>
+<div class="subheading mb-3">Master in Computer Science</div>
+<div>Computer Science</div>
+</div>
+<div class="flex-shrink-0"><span class="text-primary">September 2019 - March 2022</span></div>
+</div>
+</div>
+</section>-->
+        <hr class="m-0" />
+        <!--Experience
 <section class="resume-section" id="experience">
 <div class="resume-section-content">
 <h2 class="mb-5">Experience</h2>
@@ -122,7 +199,7 @@
 </div>
 </section>
 <hr class="m-0" />-->
-    <!--Skills
+        <!--Skills
 <section class="resume-section" id="skills">
 <div class="resume-section-content">
 <h2 class="mb-5">Skills</h2>
@@ -164,8 +241,8 @@ Agile Development & Scrum
 </ul>
 </div>
 </section>-->
-    <hr class="m-0" />
-    <!--Interests
+        <hr class="m-0" />
+        <!--Interests
 <section class="resume-section" id="interests">
 <div class="resume-section-content">
 <h2 class="mb-5">Interests</h2>
@@ -173,8 +250,8 @@ Agile Development & Scrum
 <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technology advancements in the front-end web development world.</p>
 </div>
 </section>-->
-    <hr class="m-0" />
-    <!--Awards
+        <hr class="m-0" />
+        <!--Awards
 <section class="resume-section" id="awards">
 <div class="resume-section-content">
 <h2 class="mb-5">Awards & Certifications</h2>
@@ -220,7 +297,8 @@ Place - James Buchanan High School - Hackathon 2005
 </ul>
 </div>
 </section>-->
-    --&gt;
+        --&gt;
+    </section>
 </div>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
