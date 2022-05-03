@@ -11555,20 +11555,3 @@ ul.resume-experiences li:last-child:before {
   height: 12px;
   /* shorten the line so it goes only up to the bullet. Is equal to first-child:before's top */
 }
-
-.text {
-  align-self: flex-end;
-  text-align: center;
-}
-
-.image {
-  width: 47px;
-  height: 46px;
-  padding-right: 3px;
-  align-items: center;
-}
-
-.paragraph {
-  display: flex;
-  align-items: center;
-}
