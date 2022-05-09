@@ -11407,6 +11407,34 @@ p.lead {
   font-size: 3rem;
 }
 
+.terminal {
+  width: 60%;
+  margin: -11rem auto 3rem auto;
+  text-align: left;
+  color: white;
+  padding: 0 1rem;
+  border-radius: 4px;
+  background-color: #232323;
+  min-height: 285px;
+  -webkit-animation: fadeUp 2s;
+          animation: fadeUp 2s;
+  box-shadow: 0px 12px 36.8px 9.2px rgba(0, 0, 0, 0.1);
+}
+
+.terminal--pre {
+  white-space: pre-line;
+  padding-top: 1rem;
+}
+
+.code {
+  border-radius: 3px;
+  font-family: Space Mono, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  background: var(--bg-color);
+  border: 1px solid var(--code-bg-color);
+  /* color: #009DBB;  primary color */
+  color: white;
+}
+
 section.resume-section {
   display: flex;
   align-items: center;
@@ -11526,6 +11554,7 @@ ul.resume-experiences li {
 ul.resume-experiences li:after {
   /* bullets */
   content: "• ";
+  /* color of the bullets */
   color: black;
   position: absolute;
   left: -12px;

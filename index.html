@@ -12,30 +12,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
-<!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-    <a class="navbar-brand js-scroll-trigger" href="#page-top">
-        <span class="d-block d-lg-none">Dario Amoroso d&apos;Aragona</span>
-        <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/profile.jpg" alt="..." /></span>
-        <!-- <span class="d-none d-lg-block"><img class="img-fluid img-profile mx-auto mb-0.5" src="assets/img/profile.jpg" alt="..." /></span>-->
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-            <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Education</a></li>
-            <!--<li class="nav-item"><a class="nav-link js-scroll-trigger" href="#experience">Experience</a></li>
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Education</a></li>
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li>
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href="#interests">Interests</a></li>
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards</a></li>-->
-        </ul>
-    </div>
-</nav>
+<!-- Navigation bar-->
+<div id="nav-placeholder"></div>
+<script>
+    $(function () {
+        $('#nav-placeholder').load('navigation.html');
+    });
+</script>
+<!-- end of Navigation bar-->
 <!-- Page Content-->
 <div class="container-fluid p-0">
     <!-- About-->
@@ -60,255 +48,92 @@
             </div>
         </div>
     </section>
-    <hr class="m-0" />
-    <!-- Education-->
-    <!-- Experience-->
-    <section class="resume-section" id="education">
-        <div class="resume-section-content">
-            <h2 class="mb-5">Education</h2>
-            <ul class="resume-experiences">
-                <li class="blue">
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <div class="flex-grow-1">
-                            <h3 class="wherebold mb-0">Ph.D</h3>
-                            <h3 class="what blue">until now</h3>
-                            <div class="subheading mb-3">
-                                <img src="assets/img/logo_tampere.png" style="display: inline-block; padding-right: 3px; width: 42px; height: 42px; vertical-align: middle" />
-                                <span class="subheading mb-3">Tampere University</span>
-                            </div>
-                            <div>Sofwtare Engineering</div>
-                            <!-- <p>GPA: 3.56</p>-->
-                            <div class="when">January 2022 -</div>
-                        </div>
-                    </div>
-                </li>
-                <li class="green">
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">Master degree in Computer Science</h3>
-                            <div class="subheading mb-3">
-                                <img src="assets/img/logo_uniba.jpeg" style="display: inline-block; padding-right: 3px; width: 42px; height: 42px; vertical-align: middle" />
-                                <span class="subheading mb-3">University of Bari Aldo Moro</span>
-                            </div>
-                            <div>Computer Science</div>
-                            <!-- <p>GPA: 3.56</p>-->
-                            <div class="when">September 2019 - March 2022</div>
-                        </div>
-                    </div>
-                </li>
-                <li class="green">
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">Bachelor degree in Information and Technology</h3>
-                            <div class="subheading mb-3">
-                                <img src="assets/img/logo_uniba.jpeg" style="display: inline-block; padding-right: 3px; width: 42px; height: 42px; vertical-align: middle" />
-                                <span class="subheading mb-3">University of Bari Aldo Moro</span>
-                            </div>
-                            <div>Information and Technolgy for software production</div>
-                            <!-- <p>GPA: 3.23</p>-->
-                            <div class="when">September 2014 - March 2018</div>
-                        </div>
-                    </div>
-                </li>
-                <!--ORIGINALLY
-<li class="pink">
-<div class="where">New York Times</div>
-<h3 class="what pink">Senior Online Editor</h3>
-<div class="when">2012 - Present</div>
-<p class="description">Jelly-o pie chocolate cake...</p>
-<h3 class="what pink">Senior Online Editor</h3>
-</li>-->
-            </ul>
+</div>
+<!-- The script itself, loaded AFTER your root element.-->
+<div class="d-none d-lg-block">
+    <div class="terminal">
+        <div class="terminal--pre" style="white-space: nowrap; display: inline-block">
+            <!-- Place your demo code here-->
+            <code class="code" style="color: red">
+                root $
+                <span id="myElement" style="color: white"></span>
+            </code>
+            <script src="https://unpkg.com/typeit@8.5.4/dist/index.umd.js"></script>
+            <script>
+                new TypeIt('#myElement', {
+                    speed: 50,
+                    waitUntilVisible: true,
+                })
+                    .type('whkiam', { delay: 300 })
+                    .move(-3)
+                    .delete(1)
+                    .type('o')
+                    .move(null, { to: 'END' })
+                    .pause(300)
+                    .break()
+                    .type("I'm Dario Amoroso d'Aragona, I was born in Fasano, Italy.")
+                    .break()
+                    .type('I achieved the BSc in IT and the MSc in Computer Science at University of Bari.')
+                    .pause(200)
+                    .break()
+                    .type("Since 2022 I'm a PhD student at Tampere University.")
+                    .break()
+                    .type('My research topic is Software Quality, focusing on Technical Debt.')
+                    .break()
+                    .type("Right now I'm working on (2022):")
+                    .break()
+                    .type('- <em>SonarQube: the diffuseness of Technical Debt items in projects</em>')
+                    .pause(100)
+                    .break()
+                    .type('- <em>Testing of ai-based sytems: how and how well they are tested?</em>')
+                    .pause(100)
+                    .break()
+                    .type('- <em>Tool fo regression testing</em>')
+                    .pause(100)
+                    .break()
+                    .type('- <em>How the test suite evolvs during the development of  system?</em>')
+                    .pause(100)
+                    .break()
+                    .type('- <em>Architectural Techinical Debt: How manage it?</em>')
+                    .break()
+                    .type('USE --more OPTION TO KNOW MORE ABOUT ME')
+                    .pause(1300)
+                    .empty()
+                    .pause(300)
+                    .type('whoiam', { delay: 500 })
+                    .pause(250)
+                    .type(' -- more')
+                    .break()
+                    .type('My interests and hobbies are:')
+                    .break()
+                    .type("- 🏕 <b>'boy' scout</b>")
+                    .break()
+                    .type('- 📸 <b>photography</b>')
+                    .break()
+                    .type('- 🌹 volunteering')
+                    .break()
+                    .type('- 🍗 cooking')
+                    .break()
+                    .type('- 🌳 environmental activist')
+                    .break()
+                    .type('- 🌍 <b>politics</b>')
+                    .break()
+                    .type('- 🚴 ciclism')
+                    .break()
+                    .type('- 🛶 <b>canoeing</b>')
+                    .break()
+                    .type('- 🎬 <b>film and movies (also creation and editing)</b>')
+                    .go();
+            </script>
         </div>
-        <!--OLD IMPLEMENTATION
-</section>
-<section class="resume-section" id="education">
-<div class="resume-section-content">
-<h2 class="mb-5">Education</h2>
-<h3 class="mb-5">ORIGINAL</h3>
-<ul class="resume-experiences">
-<li class="pink">
-<div class="where">University of Bari Aldo Moro</div>
-<div class="when">September 2014 - March 2019</div>
-<p class="description">Bachelor in Information and Technology</p>
-</li>
-<li class="pink">
-<div class="where">University of Bari Aldo Moro</div>
-<div class="when">September 2019 - March 2022</div>
-<p class="description">Information and Technolgy for software production.</p>
-</li>
-<li class="pink">
-<div class="where">Tampere University</div>
-<h3 class="what pink">until nowr</h3>
-<div class="when">2022 - Present</div>
-<p class="description">Ph.D</p>
-</li>
-</ul>
+    </div>
 </div>
-</section>
-<section class="resume-section" id="education">
-<div class="resume-section-content">
-<h2 class="mb-5">Education</h2>
-<h3 class="mb-5">IMPLEMENTATION</h3>
-<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-<div class="flex-grow-1">
-<h3 class="mb-0">University of Bari</h3>
-<div class="subheading mb-3">Bachelor in Information and Technology</div>
-<div>Information and Technolgy for software production</div>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">September 2014 - March 2019</span></div>
-</div>
-<div class="d-flex flex-column flex-md-row justify-content-between">
-<div class="flex-grow-1">
-<h3 class="mb-0">University of Bari</h3>
-<div class="subheading mb-3">Master in Computer Science</div>
-<div>Computer Science</div>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">September 2019 - March 2022</span></div>
-</div>
-</div>
-</section>-->
-        <hr class="m-0" />
-        <!--Experience
-<section class="resume-section" id="experience">
-<div class="resume-section-content">
-<h2 class="mb-5">Experience</h2>
-<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-<div class="flex-grow-1">
-<h3 class="mb-0">Senior Web Developer</h3>
-<div class="subheading mb-3">Intelitec Solutions</div>
-<p>Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring.</p>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">March 2013 - Present</span></div>
-</div>
-<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-<div class="flex-grow-1">
-<h3 class="mb-0">Web Developer</h3>
-<div class="subheading mb-3">Intelitec Solutions</div>
-<p>Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.</p>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">December 2011 - March 2013</span></div>
-</div>
-<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-<div class="flex-grow-1">
-<h3 class="mb-0">Junior Web Designer</h3>
-<div class="subheading mb-3">Shout! Media Productions</div>
-<p>Podcasting operational change management inside of workflows to establish a framework. Taking seamless key performance indicators offline to maximise the long tail. Keeping your eye on the ball while performing a deep dive on the start-up mentality to derive convergence on cross-platform integration.</p>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">July 2010 - December 2011</span></div>
-</div>
-<div class="d-flex flex-column flex-md-row justify-content-between">
-<div class="flex-grow-1">
-<h3 class="mb-0">Web Design Intern</h3>
-<div class="subheading mb-3">Shout! Media Productions</div>
-<p>Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits. Dramatically visualize customer directed convergence without revolutionary ROI.</p>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">September 2008 - June 2010</span></div>
-</div>
-</div>
-</section>
-<hr class="m-0" />-->
-        <!--Skills
-<section class="resume-section" id="skills">
-<div class="resume-section-content">
-<h2 class="mb-5">Skills</h2>
-<div class="subheading mb-3">Programming Languages & Tools</div>
-<ul class="list-inline dev-icons">
-<li class="list-inline-item"><i class="fab fa-java"></i></li>
-<li class="list-inline-item"><i class="fab fa-python"></i></li>
-<li class="list-inline-item"><i class="fab fa-html5"></i></li>
-<li class="list-inline-item"><i class="fab fa-css3-alt"></i></li>
-<li class="list-inline-item"><i class="fab fa-js-square"></i></li>
-<li class="list-inline-item"><i class="fab fa-angular"></i></li>
-<li class="list-inline-item"><i class="fab fa-react"></i></li>
-<li class="list-inline-item"><i class="fab fa-node-js"></i></li>
-<li class="list-inline-item"><i class="fab fa-sass"></i></li>
-<li class="list-inline-item"><i class="fab fa-less"></i></li>
-<li class="list-inline-item"><i class="fab fa-wordpress"></i></li>
-<li class="list-inline-item"><i class="fab fa-gulp"></i></li>
-<li class="list-inline-item"><i class="fab fa-grunt"></i></li>
-<li class="list-inline-item"><i class="fab fa-npm"></i></li>
-</ul>
-<div class="subheading mb-3">Workflow</div>
-<ul class="fa-ul mb-0">
-<li>
-<span class="fa-li"><i class="fas fa-check"></i></span>
-Mobile-First, Responsive Design
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-check"></i></span>
-Cross Browser Testing & Debugging
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-check"></i></span>
-Cross Functional Teams
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-check"></i></span>
-Agile Development & Scrum
-</li>
-</ul>
-</div>
-</section>-->
-        <hr class="m-0" />
-        <!--Interests
-<section class="resume-section" id="interests">
-<div class="resume-section-content">
-<h2 class="mb-5">Interests</h2>
-<p>Apart from being a web developer, I enjoy most of my time being outdoors. In the winter, I am an avid skier and novice ice climber. During the warmer months here in Colorado, I enjoy mountain biking, free climbing, and kayaking.</p>
-<p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technology advancements in the front-end web development world.</p>
-</div>
-</section>-->
-        <hr class="m-0" />
-        <!--Awards
-<section class="resume-section" id="awards">
-<div class="resume-section-content">
-<h2 class="mb-5">Awards & Certifications</h2>
-<ul class="fa-ul mb-0">
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-Google Analytics Certified Developer
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-Mobile Web Specialist - Google Certification
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-1
-<sup>st</sup>
-Place - University of Colorado Boulder - Emerging Tech Competition 2009
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-1
-<sup>st</sup>
-Place - University of Colorado Boulder - Adobe Creative Jam 2008 (UI Design Category)
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-2
-<sup>nd</sup>
-Place - University of Colorado Boulder - Emerging Tech Competition 2008
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-1
-<sup>st</sup>
-Place - James Buchanan High School - Hackathon 2006
-</li>
-<li>
-<span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-3
-<sup>rd</sup>
-Place - James Buchanan High School - Hackathon 2005
-</li>
-</ul>
-</div>
-</section>-->
-    </section>
-</div>
+<hr class="m-0" />
+<!-- Education-->
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Typed JS-->
+<script src="https://cdn.jsdelivr.net/npm/typed.js@latest/lib/typed.min.js"></script>
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
+<script src="js/terminal.js"></script>
