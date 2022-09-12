@@ -1,0 +1,75 @@
+<meta http-equiv="refresh" content="delay_time; URL=new_website_url" />
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.typeit/4.4.0/typeit.min.js"></script>
+<head>
+    <title>Thing</title>
+    <style>
+        body {
+            background: black;
+            text-align: left;
+        }
+        .bigdiv {
+            font-size: large;
+            font-family: 'Courier New';
+            padding: 2rem;
+        }
+        p {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<div class="bigdiv"></div>
+<code class="code" style="color: #009dbb; white-space: nowrap; display: inline-block; font-size: 3vw">
+    root $
+    <span id="element" style="color: white"></span>
+    <script src="https://unpkg.com/typeit@8.5.4/dist/index.umd.js"></script>
+    <script>
+        new TypeIt('#element', {
+            speed: 30,
+            waitUntilVisible: true,
+            lifeLike: false,
+            cursor: true,
+
+            afterComplete: function (instance) {
+                instance.destroy();
+                window.location.href = './about.html';
+            },
+        })
+            .type('ijit', { delay: 300 })
+            .move(-2)
+            .delete(1)
+            .type('n')
+            .move(null, { to: 'END' })
+            .pause(400)
+            .break()
+            .type('Where am I?')
+            .pause(800)
+            .break()
+            .type('Who are you?')
+            .pause(800)
+            .break()
+            .type('This is strange...')
+            .pause(800)
+            .break()
+            .type('Let me ordering my thoughts')
+            .pause(1400)
+            .break()
+            .type('Ok, now I remember')
+            .pause(300)
+            .break()
+            .type('Are you ready to enter my world?')
+            .pause(700)
+            .break()
+            .type('Well...')
+            .pause(500)
+            .break()
+            .type('Good luck and good stay')
+            .pause(600)
+            .break()
+            .break()
+            .type('ACCESS ALLOWED')
+            .pause(700)
+            .go();
+    </script>
+</code>
+<!-- The HTML, CSS and JS are not seperated so this can be copy & pasted directly into a .html file.-->
