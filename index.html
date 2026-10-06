@@ -1,75 +1,306 @@
-<meta http-equiv="refresh" content="delay_time; URL=new_website_url" />
-<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.typeit/4.4.0/typeit.min.js"></script>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Thing</title>
-    <style>
-        body {
-            background: black;
-            text-align: left;
-        }
-        .bigdiv {
-            font-size: large;
-            font-family: 'Courier New';
-            padding: 2rem;
-        }
-        p {
-            padding: 2rem;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dario Amoroso d'Aragona — Software Engineering Researcher</title>
+  <meta name="description" content="Dario Amoroso d'Aragona is a software engineering researcher working on AI-assisted software engineering, microservice architecture, software quality, and empirical methods.">
+  <link rel="canonical" href="https://damorosodaragona.github.io/">
+  <meta property="og:title" content="Dario Amoroso d'Aragona — Software Engineering Researcher">
+  <meta property="og:description" content="Research, software, and evidence at the intersection of AI, architecture, and software quality.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://damorosodaragona.github.io/">
+  <meta name="theme-color" content="#0c1631">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=20261006-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261006-1">
+  <script src="assets/js/site.js?v=20261006-1" defer></script>
 </head>
-<div class="bigdiv"></div>
-<code class="code" style="color: #009dbb; white-space: nowrap; display: inline-block; font-size: 3vw">
-    root $
-    <span id="element" style="color: white"></span>
-    <script src="https://unpkg.com/typeit@8.5.4/dist/index.umd.js"></script>
-    <script>
-        new TypeIt('#element', {
-            speed: 30,
-            waitUntilVisible: true,
-            lifeLike: false,
-            cursor: true,
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
 
-            afterComplete: function (instance) {
-                instance.destroy();
-                window.location.href = './about.html';
-            },
-        })
-            .type('ijit', { delay: 300 })
-            .move(-2)
-            .delete(1)
-            .type('n')
-            .move(null, { to: 'END' })
-            .pause(400)
-            .break()
-            .type('Where am I?')
-            .pause(800)
-            .break()
-            .type('Who are you?')
-            .pause(800)
-            .break()
-            .type('This is strange...')
-            .pause(800)
-            .break()
-            .type('Let me ordering my thoughts')
-            .pause(1400)
-            .break()
-            .type('Ok, now I remember')
-            .pause(300)
-            .break()
-            .type('Are you ready to enter my world?')
-            .pause(700)
-            .break()
-            .type('Well...')
-            .pause(500)
-            .break()
-            .type('Good luck and good stay')
-            .pause(600)
-            .break()
-            .break()
-            .type('ACCESS ALLOWED')
-            .pause(700)
-            .go();
-    </script>
-</code>
-<!-- The HTML, CSS and JS are not seperated so this can be copy & pasted directly into a .html file.-->
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="wordmark" href="#top" aria-label="Dario Amoroso d'Aragona, home">
+        <span class="wordmark-mark" aria-hidden="true">DA</span>
+        <span class="wordmark-name">Dario Amoroso d'Aragona</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span>Menu</span>
+        <span class="nav-toggle-lines" aria-hidden="true"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <a href="#work">Work</a>
+        <a href="#experience">Experience</a>
+        <a href="publications.html">Publications</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero section-pad">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Software engineering researcher · Doctor of Science (Technology)</p>
+          <h1>I turn software evidence into <span>methods and tools</span> teams can use.</h1>
+          <p class="hero-lede">I work across applied AI, software architecture, and software quality—from empirical studies of microservice coupling to developer tools, research datasets, and LLM-based decision support.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#work">Explore my work</a>
+            <a class="button button-secondary" href="publications.html">View publications</a>
+          </div>
+          <ul class="profile-links" aria-label="Profiles and contact">
+            <li><a href="mailto:darioamorosodaragona@gmail.com">Email</a></li>
+            <li><a href="https://github.com/damorosodaragona" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/dario-amoroso-d-aragona/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://scholar.google.com/citations?user=l-gOe7cAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+          </ul>
+        </div>
+
+        <aside class="hero-portrait reveal" aria-label="Profile summary">
+          <div class="portrait-frame">
+            <img src="assets/img/profile.jpg?v=20261006-1" alt="Portrait of Dario Amoroso d'Aragona" width="500" height="500">
+          </div>
+          <div class="availability-card">
+            <span class="signal" aria-hidden="true"></span>
+            <div>
+              <strong>Postdoc researcher at SDU</strong>
+              <span>SKILLAB · Denmark</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="shell evidence-strip reveal" aria-label="Career highlights">
+        <div>
+          <span class="evidence-value">2026</span>
+          <span class="evidence-label">DSc (Technology), Tampere University</span>
+        </div>
+        <div>
+          <span class="evidence-value">ABB</span>
+          <span class="evidence-label">Industrial doctorate in software quality</span>
+        </div>
+        <div>
+          <span class="evidence-value">AI × SE</span>
+          <span class="evidence-label">Architecture, quality, and decision support</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="focus section-pad" aria-labelledby="focus-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <p class="section-index">01 / Focus</p>
+          <h2 id="focus-title">Research grounded in working software.</h2>
+          <p>I combine empirical research with implementation: define a measurable problem, build the method or system, and evaluate it against real repositories and engineering workflows.</p>
+        </div>
+        <div class="focus-grid">
+          <article class="focus-card reveal">
+            <span class="card-number">01</span>
+            <h3>AI for software engineering</h3>
+            <p>LLMs, retrieval-augmented generation, and agentic systems for architecture analysis, software quality, and decision support.</p>
+          </article>
+          <article class="focus-card reveal">
+            <span class="card-number">02</span>
+            <h3>Microservice architecture</h3>
+            <p>Logical and organizational coupling, ownership, system evolution, and the socio-technical conditions behind service independence.</p>
+          </article>
+          <article class="focus-card reveal">
+            <span class="card-number">03</span>
+            <h3>Software quality &amp; testing</h3>
+            <p>Technical debt, regression-test selection, mutation testing, test smells, automated quality gates, and developer tooling.</p>
+          </article>
+          <article class="focus-card reveal">
+            <span class="card-number">04</span>
+            <h3>Empirical methods</h3>
+            <p>Mining software repositories, dataset construction, statistical analysis, tool evaluation, and reproducible experimentation.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="work section-pad" aria-labelledby="work-title">
+      <div class="shell">
+        <div class="section-heading section-heading-split reveal">
+          <div>
+            <p class="section-index">02 / Selected work</p>
+            <h2 id="work-title">From research questions to usable systems.</h2>
+          </div>
+          <p>Selected research and engineering work spanning European projects, industrial R&amp;D, open-source tools, and scientific datasets.</p>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card project-card-featured reveal">
+            <div class="project-meta"><span>Current</span><span>Applied research</span></div>
+            <h3>SKILLAB Projector</h3>
+            <p>A Python/FastAPI microservice for multidimensional labour-market skill analytics, temporal trends, statistical comparisons, and decision-support visualisation.</p>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Streamlit</li><li>CI/CD</li>
+            </ul>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-meta"><span>Doctoral research</span><span>Architecture</span></div>
+            <h3>Microservice Logical Coupling</h3>
+            <p>Measurement and empirical analysis of hidden change dependencies between services, culminating in the MLCI metric and a 2026 doctoral dissertation.</p>
+            <a class="text-link" href="https://urn.fi/URN:ISBN:978-952-03-4709-3" target="_blank" rel="noopener">Read the dissertation</a>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-meta"><span>Open source</span><span>Testing</span></div>
+            <h3>CATTO</h3>
+            <p>A just-in-time regression-test selection tool for Java projects, with an IntelliJ IDEA plugin and an empirical evaluation on open-source systems.</p>
+            <div class="link-row">
+              <a class="text-link" href="https://plugins.jetbrains.com/plugin/31622-jenkins-ci-notifier" target="_blank" rel="noopener">Jetbrains Marketplace</a>
+              <a class="text-link" href="https://catto-tool.github.io/" target="_blank" rel="noopener">Project</a>
+              <a class="text-link" href="https://github.com/catto-tool" target="_blank" rel="noopener">Source</a>
+            </div>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>Java</li><li>JUnit</li><li>Intellij Platform Plugin SDK</li><li>CI/CD</li>
+            </ul>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-meta"><span>Open source</span><span>Developer tooling</span></div>
+            <h3>CI Status Notifier</h3>
+            <p>A Kotlin-based JetBrains IDE plugin for Jenkins and GitHub CI status, build notifications, pipeline-stage visibility, and artifact inspection.</p>
+            <a class="text-link" href="https://plugins.jetbrains.com/plugin/19345-catto" target="_blank" rel="noopener">Jetbrains Marketplace</a>
+            <a class="text-link" href="https://github.com/damorosodaragona/ci-status-notifier-PyCharm-plugin" target="_blank" rel="noopener">View source</a>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>Java</li><li>Kotlin</li><li>Jenkins</li><li>Intellij Platform Plugin SDK</li><li>CI/CD</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="experience section-pad" aria-labelledby="experience-title">
+      <div class="shell experience-layout">
+        <div class="section-heading sticky-heading reveal">
+          <p class="section-index">03 / Experience</p>
+          <h2 id="experience-title">Research, engineering, and technology transfer.</h2>
+          <p>International experience connecting academic questions with industrial constraints and maintainable software.</p>
+        </div>
+
+        <div class="timeline">
+          <article class="timeline-item reveal">
+            <div class="timeline-date">2026—present</div>
+            <div>
+              <p class="timeline-org">University of Oulu / University of Southern Denmark · SKILLAB</p>
+              <h3>Postdoc Researcher</h3>
+              <p>Leading end-to-end technical work on Projector: architecture, APIs, data integrations, analytics, demonstrator, containerisation, automated checks, and CI/CD. Investigating LLM-based agents for architecture analysis and software-quality decision support.</p>
+            </div>
+          </article>
+          <article class="timeline-item reveal">
+            <div class="timeline-date">2022—2026</div>
+            <div>
+              <p class="timeline-org">Tampere University · ABB</p>
+              <h3>Industrial Doctoral Researcher</h3>
+              <p>Studied logical coupling in microservice architectures and developed the MLCI metric. Translated industrial requirements into a Kubernetes-based software-quality solution integrated with ABB's Jenkins and Microsoft Teams workflows.</p>
+            </div>
+          </article>
+          <article class="timeline-item reveal">
+            <div class="timeline-date">2020—2021</div>
+            <div>
+              <p class="timeline-org">Manbot Project</p>
+              <h3>Chief Technology Officer</h3>
+              <p>Directed the architecture and delivery of a voice-based companion prototype, coordinating a multidisciplinary team and work on voice interactions, CI/CD, and wake-word recognition.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="publication-preview section-pad" aria-labelledby="publication-title">
+      <div class="shell">
+        <div class="section-heading section-heading-split reveal">
+          <div>
+            <p class="section-index">04 / Publications</p>
+            <h2 id="publication-title">Selected research outputs.</h2>
+          </div>
+          <p>Peer-reviewed research on microservices, software quality, technical debt, testing, developer organisation, and AI-assisted development.</p>
+        </div>
+
+        <div class="featured-publications">
+          <article class="publication-teaser reveal">
+            <div class="publication-year">2026</div>
+            <div>
+              <p class="publication-type">Doctoral dissertation</p>
+              <h3><a href="https://urn.fi/URN:ISBN:978-952-03-4709-3" target="_blank" rel="noopener">Microservices Logical Coupling: Measurement, Evolution, and Organizational Implications</a></h3>
+              <p>Tampere University Dissertations, vol. 1563.</p>
+            </div>
+          </article>
+          <article class="publication-teaser reveal">
+            <div class="publication-year">2025</div>
+            <div>
+              <p class="publication-type">Journal article · Computing</p>
+              <h3><a href="https://doi.org/10.1007/s00607-025-01454-7" target="_blank" rel="noopener">Exploring Microservice Ownership and Organizational Coupling in Open-Source Projects</a></h3>
+              <p>An empirical study of ownership structures and cross-service collaboration.</p>
+            </div>
+          </article>
+          <article class="publication-teaser reveal">
+            <div class="publication-year">2024</div>
+            <div>
+              <p class="publication-type">Journal article · Empirical Software Engineering</p>
+              <h3><a href="https://doi.org/10.1007/s10664-023-10436-2" target="_blank" rel="noopener">Machine Learning-Based Test Smell Detection</a></h3>
+              <p>Machine-learning models for detecting maintainability problems in test code.</p>
+            </div>
+          </article>
+        </div>
+        <a class="button button-secondary publication-cta" href="publications.html">Browse the complete publication record</a>
+      </div>
+    </section>
+
+    <section class="education-service section-pad" aria-labelledby="education-title">
+      <div class="shell two-column-section">
+        <div class="reveal">
+          <p class="section-index">05 / Education</p>
+          <h2 id="education-title">Academic training.</h2>
+          <div class="compact-list">
+            <article>
+              <span>2026</span>
+              <div><h3>Doctor of Science (Technology)</h3><p>Tampere University · Computing and Electrical Engineering</p></div>
+            </article>
+            <article>
+              <span>2022</span>
+              <div><h3>MSc in Computer Science</h3><p>University of Bari · Knowledge Engineering and Machine Intelligence</p></div>
+            </article>
+            <article>
+              <span>2018</span>
+              <div><h3>BSc in Computer Science</h3><p>University of Bari · Software Engineering for Production Technologies</p></div>
+            </article>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <p class="section-index">Academic service</p>
+          <h2>Contributing to the research community.</h2>
+          <p>Reviewer for journals including TOSEM, Empirical Software Engineering, and Software Quality Journal; program committee and reviewing service for software engineering and architecture venues.</p>
+          <p>Conference organisation roles include EASE, GE@ICSE, SANER, and CHASE. Recipient of the Microservices 2023 Best Paper Award and a selected JetBrains IDE Research Integration proposal.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact section-pad" aria-labelledby="contact-title">
+      <div class="shell contact-card reveal">
+        <p class="section-index">06 / Contact</p>
+        <h2 id="contact-title">Interested in research, applied AI, or software architecture?</h2>
+        <p>I'm open to conversations about research collaboration, technology transfer, software engineering, and AI-assisted development.</p>
+        <div class="contact-actions">
+          <a class="button button-light" href="mailto:darioamorosodaragona@gmail.com">Send an email</a>
+          <a class="button button-outline-light" href="https://www.linkedin.com/in/dario-amoroso-d-aragona/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© <span data-current-year>2026</span> Dario Amoroso d'Aragona</p>
+      <a href="#top">Back to top</a>
+    </div>
+  </footer>
+</body>
+</html>
