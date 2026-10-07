@@ -1398,6 +1398,215 @@ h3 {
   max-width: 720px;
 }
 
+.lab-story {
+  position: relative;
+  display: grid;
+  min-height: 440px;
+  overflow: hidden;
+  padding: clamp(28px, 6vw, 64px);
+  place-items: center;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 78% 22%, rgba(0, 197, 224, 0.2), transparent 27%),
+    radial-gradient(circle at 16% 84%, rgba(72, 103, 255, 0.28), transparent 30%),
+    #0c1631;
+  color: var(--white);
+  outline: none;
+}
+
+.lab-story::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  content: "";
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+
+.lab-story-skip {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: 18px;
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(12, 22, 49, 0.5);
+  color: rgba(255, 255, 255, 0.78);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lab-story-frame {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 760px);
+  min-height: 220px;
+}
+
+.lab-story-scene {
+  display: grid;
+  min-height: 220px;
+  align-content: center;
+  gap: 13px;
+  animation: labStoryIn 620ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.lab-story-scene p {
+  margin: 0;
+  color: var(--cyan);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lab-story-scene h4 {
+  max-width: 720px;
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.lab-story-scene strong {
+  color: #b9c8ff;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1.4;
+}
+
+.lab-story-progress {
+  position: absolute;
+  z-index: 2;
+  right: clamp(28px, 6vw, 64px);
+  bottom: 24px;
+  left: clamp(28px, 6vw, 64px);
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lab-story-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cyan);
+  transition: width 500ms ease;
+}
+
+@keyframes labStoryIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.lab-entry {
+  display: grid;
+  gap: 24px;
+}
+
+.lab-entry-heading {
+  max-width: 780px;
+}
+
+.lab-entry-heading h4 {
+  margin-bottom: 10px;
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
+}
+
+.lab-entry-heading > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.lab-entry-chapters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lab-entry-chapters article {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #f8faff;
+}
+
+.lab-entry-chapters span,
+.lab-entry-optional {
+  color: var(--blue);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lab-entry-chapters strong {
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.lab-entry-chapters p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.lab-entry-actions,
+.lab-result-actions,
+.lab-completion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.lab-entry-actions > button {
+  display: grid;
+  min-width: min(100%, 285px);
+  gap: 3px;
+  text-align: left;
+}
+
+.lab-entry-actions > button span {
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.82;
+}
+
+.lab-entry-optional {
+  margin: 0;
+  padding-top: 2px;
+  color: var(--muted);
+  line-height: 1.55;
+  text-transform: none;
+}
+
+.lab-entry-optional strong {
+  color: var(--ink-2);
+}
+
 .coupling-lab {
   display: grid;
   min-width: 0;
@@ -1420,7 +1629,7 @@ h3 {
 
 .lab-journey {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1455,7 +1664,7 @@ h3 {
   right: calc(100% - 15px);
 }
 
-.lab-journey-step span {
+.lab-journey-step > span {
   position: relative;
   z-index: 1;
   display: grid;
@@ -1468,8 +1677,19 @@ h3 {
 }
 
 .lab-journey-step small {
+  display: grid;
+  gap: 2px;
   max-width: 110px;
   line-height: 1.35;
+}
+
+.lab-journey-step small strong {
+  color: inherit;
+  font-size: 0.68rem;
+}
+
+.lab-journey-step.is-optional:not(.is-current):not(.is-complete) {
+  color: #9a89a9;
 }
 
 .lab-journey-step.is-current,
@@ -1477,12 +1697,12 @@ h3 {
   color: var(--blue);
 }
 
-.lab-journey-step.is-current span,
-.lab-journey-step.is-complete span {
+.lab-journey-step.is-current > span,
+.lab-journey-step.is-complete > span {
   border-color: var(--blue);
 }
 
-.lab-journey-step.is-current span {
+.lab-journey-step.is-current > span {
   background: var(--blue);
   color: var(--white);
 }
@@ -1518,6 +1738,33 @@ h3 {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
   font-weight: 600;
+}
+
+.lab-stakes {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 15px;
+  border: 1px solid #efd3a0;
+  border-radius: 11px;
+  background: #fff9ed;
+}
+
+.lab-stakes span {
+  flex: 0 0 auto;
+  color: #9a5e00;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.lab-stakes p {
+  margin: 0;
+  color: #695533;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .lab-terms {
@@ -1560,6 +1807,26 @@ h3 {
   color: var(--ink-2);
 }
 
+.lab-terms-reminder {
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #f8faff;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.lab-terms-reminder summary {
+  color: var(--ink-2);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lab-terms-reminder p {
+  margin: 10px 0 0;
+  line-height: 1.55;
+}
+
 .lab-objectives,
 .tutorial-callout {
   padding: 18px 20px;
@@ -1584,6 +1851,47 @@ h3 {
   color: var(--ink-2);
   font-size: 0.78rem;
   font-weight: 700;
+}
+
+.lab-mission-focus {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 19px;
+  border: 1px solid #b9c9f6;
+  border-radius: 14px;
+  background: #f1f5ff;
+}
+
+.lab-mission-focus .evidence-heading {
+  margin-bottom: 5px;
+}
+
+.lab-mission-focus > div > strong {
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.lab-mission-focus details {
+  min-width: 230px;
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.lab-mission-focus summary {
+  color: var(--blue);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lab-mission-focus ul {
+  display: grid;
+  gap: 7px;
+  margin: 11px 0 0;
+  padding-left: 18px;
+  line-height: 1.45;
 }
 
 .tutorial-callout > p:nth-child(2) {
@@ -1727,6 +2035,20 @@ h3 {
   line-height: 1.45;
 }
 
+.lab-howto-compact {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #e9edf4;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.lab-howto-compact strong {
+  color: var(--ink-2);
+}
+
 .lab-status {
   min-height: 42px;
   margin: 0 0 12px;
@@ -1766,6 +2088,10 @@ h3 {
   border-color: var(--cyan);
   box-shadow: 0 0 0 4px rgba(0, 174, 202, 0.14);
   transform: translateY(-2px);
+}
+
+.lab-boundary.is-affected {
+  animation: labBoundarySettle 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .boundary-handle {
@@ -1862,6 +2188,39 @@ h3 {
 .responsibility-piece > span,
 .ownership-piece > span {
   color: #8c98aa;
+}
+
+.responsibility-piece .piece-label {
+  flex: 1;
+  color: var(--ink-2);
+}
+
+.lab-piece.has-impact {
+  border-width: 2px;
+}
+
+.lab-piece.has-impact.is-resolved {
+  border-color: #8bcdb7;
+  background: #eff9f5;
+}
+
+.lab-piece.has-impact.is-remaining {
+  border-color: #e7bf72;
+  background: #fff8e9;
+}
+
+.lab-piece.is-affected {
+  animation: labPieceArrive 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.lab-piece .piece-impact {
+  flex: 0 0 auto;
+  color: inherit;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.57rem;
+  font-weight: 700;
+  text-align: right;
+  text-transform: uppercase;
 }
 
 .new-boundary {
@@ -1989,6 +2348,108 @@ h3 {
   font-size: 0.62rem;
 }
 
+.boundary-impact {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--white);
+}
+
+.boundary-impact-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.boundary-impact-heading .evidence-heading {
+  margin: 0;
+}
+
+.boundary-impact-heading > span {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.boundary-impact-list {
+  display: grid;
+  gap: 7px;
+}
+
+.boundary-impact-row {
+  display: grid;
+  grid-template-columns: 30px minmax(160px, 0.8fr) minmax(220px, 1.2fr);
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  animation: labImpactReveal 500ms calc(var(--impact-index, 0) * 90ms) ease both;
+}
+
+@keyframes labBoundarySettle {
+  0% { box-shadow: 0 0 0 0 rgba(36, 87, 255, 0); transform: scale(0.985); }
+  45% { box-shadow: 0 0 0 5px rgba(36, 87, 255, 0.13); transform: scale(1.01); }
+  100% { box-shadow: 0 0 0 0 rgba(36, 87, 255, 0); transform: scale(1); }
+}
+
+@keyframes labPieceArrive {
+  0% { opacity: 0.35; transform: translateY(-10px); }
+  55% { opacity: 1; transform: translateY(3px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes labImpactReveal {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.boundary-impact-row.is-resolved {
+  border-color: #b9dfd2;
+  background: #eff9f5;
+}
+
+.boundary-impact-row.is-remaining {
+  border-color: #eed39b;
+  background: #fff8e9;
+}
+
+.impact-state {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--ink-2);
+  font-weight: 900;
+}
+
+.boundary-impact-row > div {
+  display: grid;
+  gap: 2px;
+}
+
+.boundary-impact-row strong {
+  color: var(--ink-2);
+  font-size: 0.76rem;
+}
+
+.boundary-impact-row small,
+.boundary-impact-row p {
+  color: var(--muted);
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+.boundary-impact-row p {
+  margin: 0;
+  text-align: right;
+}
+
 .action-trail {
   display: flex;
   flex-wrap: wrap;
@@ -2062,12 +2523,24 @@ h3 {
   font-size: 0.82rem;
 }
 
-.simulation-panel.is-waiting > p {
+.simulation-panel.is-waiting > div:last-child {
   max-width: 440px;
+}
+
+.simulation-panel.is-waiting > div:last-child > p {
   margin: 0;
   color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.5;
+}
+
+.simulation-disclaimer {
+  display: block;
+  margin-top: 9px;
+  color: #768296;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  line-height: 1.45;
 }
 
 .simulation-heading {
@@ -2085,8 +2558,25 @@ h3 {
 
 .metric-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 9px;
+}
+
+.secondary-metrics {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.secondary-metrics summary {
+  width: fit-content;
+  color: var(--ink-2);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondary-metrics .metric-grid {
+  margin-top: 10px;
 }
 
 .metric-card {
@@ -2148,6 +2638,38 @@ h3 {
 
 .lab-result > p:not(.game-kicker) {
   max-width: 760px;
+}
+
+.strategy-tradeoff {
+  display: grid;
+  max-width: 760px;
+  gap: 5px;
+  margin-bottom: 20px;
+  padding: 15px 17px;
+  border-left: 3px solid var(--cyan);
+  border-radius: 0 10px 10px 0;
+  background: #eef9fb;
+}
+
+.strategy-tradeoff strong {
+  color: var(--ink-2);
+  font-size: 0.76rem;
+}
+
+.strategy-tradeoff span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.lab-result .lab-result-summary {
+  margin-bottom: 20px;
+  font-size: 0.82rem;
+}
+
+.lab-completion-actions,
+.lab-result-actions {
+  margin-top: 16px;
 }
 
 .lab-piece:focus-visible,
@@ -2765,15 +3287,20 @@ h3 {
 }
 
 @media (max-width: 900px) {
-  .lab-journey-step small {
+  .lab-journey-step small > span {
     display: none;
   }
 
   .lab-terms,
   .tutorial-callout > div,
   .team-evidence,
-  .lab-howto {
+  .lab-howto,
+  .lab-mission-focus {
     grid-template-columns: 1fr;
+  }
+
+  .lab-mission-focus details {
+    min-width: 0;
   }
 
   .lab-terms > div + div {
@@ -2791,6 +3318,46 @@ h3 {
   .game-card-coupling .game-stage {
     padding-right: 16px;
     padding-left: 16px;
+  }
+
+  .lab-entry-chapters {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-story {
+    min-height: 400px;
+    padding: 28px 20px;
+    border-radius: 15px;
+  }
+
+  .lab-story-frame,
+  .lab-story-scene {
+    min-height: 240px;
+  }
+
+  .lab-story-scene h4 {
+    font-size: clamp(1.8rem, 10vw, 2.65rem);
+  }
+
+  .lab-story-progress {
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .lab-stakes {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .lab-entry-actions,
+  .lab-entry-actions > button,
+  .lab-result-actions,
+  .lab-result-actions > button,
+  .lab-completion-actions,
+  .lab-completion-actions > button {
+    width: 100%;
   }
 
   .lab-progress-row,
@@ -2831,6 +3398,21 @@ h3 {
     grid-template-columns: 1fr;
   }
 
+  .boundary-impact-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .boundary-impact-row {
+    grid-template-columns: 28px 1fr;
+  }
+
+  .boundary-impact-row p {
+    grid-column: 2;
+    text-align: left;
+  }
+
   .new-boundary {
     align-items: flex-start;
     flex-direction: column;
@@ -2862,6 +3444,8 @@ h3 {
   *::before,
   *::after {
     scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 

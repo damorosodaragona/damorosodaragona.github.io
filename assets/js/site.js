@@ -140,6 +140,7 @@ const architectureMission = {
   label: 'Try it yourself · Service boundaries',
   title: 'Prepare the shop for its next release.',
   brief: 'The diagram says there are four independent services. The history tells a messier story. Redesign the boundaries, then simulate the next release.',
+  stakes: 'The release is tomorrow. Repeated cross-service changes are slowing the team down, but a rushed merge could create an even bigger service.',
   objective: ['Reduce cross-service coordination to 2 or less', 'Keep service focus at 90% or more', 'Keep the largest service at 4 responsibilities or fewer'],
   state: {
     services: [
@@ -226,6 +227,7 @@ const teamMission = {
   label: 'Try it yourself · Team boundaries',
   title: 'Make responsibility match the real work.',
   brief: 'Ownership says one thing; the saved changes say another. Reorganize people, services, or teams, then simulate the next release.',
+  stakes: 'Friday’s release crosses three teams. You have one redesign cycle to reduce handoffs without overloading a single team.',
   objective: ['Reduce cross-team handoffs to 2 or less', 'Reach at least 90% ownership alignment', 'Keep every team load at 6 points or less'],
   state: {
     services: [{ id: 'billing', name: 'Billing' }, { id: 'accounts', name: 'Accounts' }, { id: 'reporting', name: 'Reporting' }],
@@ -247,6 +249,7 @@ const advancedArchitectureMission = {
   label: 'Advanced mission · Localized coupling',
   title: 'Fix the hotspot without over-correcting.',
   brief: 'Orders and Notifications often change together, but the repeated work is concentrated in event translation. A one-off platform upgrade also touched every service.',
+  stakes: 'A maintenance window is approaching. Fix the recurring hotspot without redesigning around a one-off upgrade.',
   objective: ['Reduce recurring coordination to 2 or less', 'Keep service focus at 85% or more', 'Avoid a service larger than 4 responsibilities'],
   state: {
     services: [
@@ -270,6 +273,7 @@ const advancedTeamMission = {
   label: 'Advanced mission · After the migration',
   title: 'Choose between moving people and moving ownership.',
   brief: 'A platform migration changed who performs the work. Occasional help is normal; repeated cross-team maintenance is expensive. Find a balanced structure.',
+  stakes: 'The migration is complete, but its handoffs remain. Align the recurring work before the next on-call rotation.',
   objective: ['Reduce cross-team handoffs to 4 or less', 'Reach at least 85% ownership alignment', 'Keep every team load at 7 points or less'],
   state: {
     services: [{ id: 'gateway', name: 'Gateway' }, { id: 'identity', name: 'Identity' }, { id: 'audit', name: 'Audit' }, { id: 'messaging', name: 'Messaging' }],
@@ -507,6 +511,52 @@ const renderImpactGraph = (impactPath) => {
 };
 
 const couplingLabState = new WeakMap();
+const couplingStoryTimers = new WeakMap();
+
+const couplingStoryScenes = [
+  {
+    kicker: 'A project begins',
+    line: 'Maya and Leo build a shop from small, independent services.',
+    accent: 'Each service has one job.',
+    duration: 2100,
+  },
+  {
+    kicker: 'Monday',
+    line: 'Checkout changes.',
+    accent: 'Inventory must change too.',
+    duration: 2200,
+  },
+  {
+    kicker: 'Tuesday',
+    line: 'Checkout changes again.',
+    accent: 'Inventory follows again.',
+    duration: 2200,
+  },
+  {
+    kicker: 'Wednesday',
+    line: 'A Catalog update pulls Search into the same release.',
+    accent: 'Another boundary crossed.',
+    duration: 2200,
+  },
+  {
+    kicker: 'Something does not add up',
+    line: 'Different code. Separate services.',
+    accent: 'The architecture says they are independent.',
+    duration: 2700,
+  },
+  {
+    kicker: 'But the history tells another story',
+    line: 'They keep changing together.',
+    accent: 'What is really moving together?',
+    duration: 3600,
+  },
+];
+
+const clearCouplingStory = (stage) => {
+  const timer = couplingStoryTimers.get(stage);
+  if (timer) window.clearTimeout(timer);
+  couplingStoryTimers.delete(stage);
+};
 
 const cloneLabState = (state) => JSON.parse(JSON.stringify(state));
 
@@ -578,6 +628,7 @@ const loadLabScenario = (runtime) => {
   const scenario = getCurrentLabScenario(runtime);
   runtime.state = cloneLabState(scenario.state);
   runtime.initialState = cloneLabState(scenario.state);
+  runtime.strategyActionsAtLoad = [...runtime.strategyActions];
   runtime.history = [];
   runtime.actions = [];
   runtime.selected = null;
@@ -589,23 +640,39 @@ const loadLabScenario = (runtime) => {
 };
 
 const renderLabJourney = (runtime) => {
-  const markers = couplingJourney.map((phase, index) => `
-    <li class="lab-journey-step${index === runtime.phaseIndex ? ' is-current' : ''}${index < runtime.phaseIndex ? ' is-complete' : ''}">
-      <span>${index < runtime.phaseIndex ? '✓' : index + 1}</span>
-      <small>${phase.label}</small>
+  const chapters = [
+    { number: '1', label: 'Service boundaries', detail: 'Learn + mission', start: 0, end: 1 },
+    { number: '2', label: 'Team boundaries', detail: 'Learn + mission', start: 2, end: 3 },
+    { number: '★', label: 'Optional challenges', detail: 'Two advanced cases', start: 4, end: 5 },
+  ];
+  const currentChapter = chapters.find((chapter) => runtime.phaseIndex >= chapter.start && runtime.phaseIndex <= chapter.end);
+  const currentMode = runtime.phaseIndex === 0 || runtime.phaseIndex === 2
+    ? 'Guided practice'
+    : runtime.phaseIndex < 4
+      ? 'Try it yourself'
+      : `Optional challenge ${runtime.phaseIndex - 3} of 2`;
+  const markers = chapters.map((chapter) => `
+    <li class="lab-journey-step${chapter === currentChapter ? ' is-current' : ''}${runtime.phaseIndex > chapter.end ? ' is-complete' : ''}${chapter.start === 4 ? ' is-optional' : ''}">
+      <span>${runtime.phaseIndex > chapter.end ? '✓' : chapter.number}</span>
+      <small><strong>${chapter.label}</strong><span>${chapter.detail}</span></small>
     </li>
   `).join('');
 
   return `
     <div class="lab-progress-row">
-      <p class="game-progress">Phase ${runtime.phaseIndex + 1} / ${couplingJourney.length}</p>
-      <span class="game-score">Learn → experiment → compare</span>
+      <p class="game-progress">${currentChapter?.label || 'Coupling Lab'} · ${currentMode}</p>
+      <span class="game-score">Read evidence → redesign → compare</span>
     </div>
     <ol class="lab-journey" aria-label="Coupling Lab progress">${markers}</ol>
   `;
 };
 
-const renderArchitectureTerms = () => `
+const renderArchitectureTerms = (compact = false) => compact ? `
+  <details class="lab-terms-reminder">
+    <summary>Need a quick definition?</summary>
+    <p><strong>Logical coupling</strong> means separate services repeatedly need changes together. <strong>MLCI</strong> measures that pattern from saved Git changes.</p>
+  </details>
+` : `
   <div class="lab-terms" aria-label="Plain-language definitions">
     <div><strong>Microservice</strong><span>A small program with one specific job.</span></div>
     <div><strong>Saved change</strong><span>A recorded code update, also called a Git commit.</span></div>
@@ -614,7 +681,12 @@ const renderArchitectureTerms = () => `
   <p class="lab-research-note">Researchers can measure this pattern from Git history. <strong>MLCI</strong> means Microservice Logical Coupling Index.</p>
 `;
 
-const renderTeamTerms = () => `
+const renderTeamTerms = (compact = false) => compact ? `
+  <details class="lab-terms-reminder">
+    <summary>Need a quick definition?</summary>
+    <p><strong>Ownership</strong> is formal responsibility. <strong>Contribution</strong> is who actually changed the code. Repeated work across that boundary is organizational coupling.</p>
+  </details>
+` : `
   <div class="lab-terms" aria-label="Plain-language definitions">
     <div><strong>Ownership</strong><span>The team formally responsible for decisions and incidents.</span></div>
     <div><strong>Contribution</strong><span>Who actually changed the code, regardless of ownership.</span></div>
@@ -668,19 +740,89 @@ const isGuidedTarget = (scenario, kind, id) => {
   return expected.targetId === id;
 };
 
+const isRecentlyAffected = (runtime, kind, id) => {
+  const action = runtime.lastAction;
+  if (!action) return false;
+  if (kind === 'service') {
+    return action.targetId === id
+      || (action.type === 'split-service' && id === `new-${action.sourceId}`);
+  }
+  if (kind === 'team') {
+    return action.targetId === id
+      || (action.type === 'split-team' && id === `new-team-${action.sourceId}`);
+  }
+  if (kind === 'responsibility') return ['move-responsibility', 'split-service'].includes(action.type) && action.sourceId === id;
+  if (kind === 'person') return action.type === 'move-person' && action.sourceId === id;
+  if (kind === 'ownership') return ['transfer-ownership', 'split-team'].includes(action.type) && action.sourceId === id;
+  return false;
+};
+
+const getArchitectureImpactRows = (state, coChanges) => {
+  const responsibilityMap = {};
+  state.services.forEach((service) => {
+    service.responsibilities.forEach((responsibility) => {
+      responsibilityMap[responsibility.id] = { responsibility, service };
+    });
+  });
+
+  return coChanges.map(([leftId, rightId, weight]) => {
+    const left = responsibilityMap[leftId];
+    const right = responsibilityMap[rightId];
+    const resolved = left?.service.id === right?.service.id;
+    return {
+      leftId,
+      rightId,
+      weight,
+      resolved,
+      leftLabel: left?.responsibility.label || leftId,
+      rightLabel: right?.responsibility.label || rightId,
+      leftService: left?.service.name || 'Unknown service',
+      rightService: right?.service.name || 'Unknown service',
+    };
+  }).sort((left, right) => right.weight - left.weight);
+};
+
+const renderArchitectureImpactMap = (runtime, scenario) => {
+  if (!runtime.simulated) return '';
+  const rows = getArchitectureImpactRows(runtime.state, scenario.coChanges);
+  return `
+    <section class="boundary-impact" aria-label="Connections after the redesign">
+      <div class="boundary-impact-heading"><p class="evidence-heading">Connections revealed after simulation</p><span>Green stays inside one boundary</span></div>
+      <div class="boundary-impact-list">${rows.map((row, index) => `
+        <article class="boundary-impact-row ${row.resolved ? 'is-resolved' : 'is-remaining'}" style="--impact-index: ${index}">
+          <span class="impact-state" aria-hidden="true">${row.resolved ? '✓' : '↔'}</span>
+          <div><strong>${row.leftLabel} ↔ ${row.rightLabel}</strong><small>${row.weight} recurring shared ${row.weight === 1 ? 'change' : 'changes'}</small></div>
+          <p>${row.resolved ? `Now contained inside ${row.leftService}` : `Still crosses ${row.leftService} and ${row.rightService}`}</p>
+        </article>
+      `).join('')}</div>
+    </section>
+  `;
+};
+
+const getResponsibilityImpact = (runtime, scenario, responsibilityId) => {
+  if (!runtime.simulated) return null;
+  const matching = getArchitectureImpactRows(runtime.state, scenario.coChanges)
+    .filter((row) => row.leftId === responsibilityId || row.rightId === responsibilityId);
+  if (!matching.length) return null;
+  return matching.some((row) => !row.resolved) ? 'remaining' : 'resolved';
+};
+
 const renderArchitectureBoard = (runtime, scenario, tutorial) => {
   const locked = tutorial && runtime.tutorialActionComplete;
   const cards = runtime.state.services.map((service) => {
     const selected = runtime.selected?.kind === 'service' && runtime.selected.id === service.id;
+    const affectedBoundary = isRecentlyAffected(runtime, 'service', service.id);
     const responsibilities = service.responsibilities.map((responsibility) => {
       const isSelected = runtime.selected?.kind === 'responsibility' && runtime.selected.id === responsibility.id;
       const guided = tutorial && isGuidedSource(scenario, 'responsibility', responsibility.id);
-      return `<li><button class="lab-piece responsibility-piece${isSelected ? ' is-selected' : ''}${guided ? ' is-guided' : ''}" type="button" draggable="${!locked}" data-piece-kind="responsibility" data-piece-id="${responsibility.id}" aria-pressed="${isSelected}"${locked ? ' disabled' : ''}><span aria-hidden="true">⋮⋮</span>${responsibility.label}</button></li>`;
+      const impact = getResponsibilityImpact(runtime, scenario, responsibility.id);
+      const affected = isRecentlyAffected(runtime, 'responsibility', responsibility.id);
+      return `<li><button class="lab-piece responsibility-piece${isSelected ? ' is-selected' : ''}${guided ? ' is-guided' : ''}${impact ? ` has-impact is-${impact}` : ''}${affected ? ' is-affected' : ''}" type="button" draggable="${!locked}" data-piece-kind="responsibility" data-piece-id="${responsibility.id}" aria-pressed="${isSelected}"${locked ? ' disabled' : ''}><span aria-hidden="true">⋮⋮</span><span class="piece-label">${responsibility.label}</span>${impact ? `<small class="piece-impact">${impact === 'resolved' ? 'Inside boundary' : 'Still crosses'}</small>` : ''}</button></li>`;
     }).join('');
     const guided = tutorial && (isGuidedSource(scenario, 'service', service.id) || isGuidedTarget(scenario, 'service', service.id));
 
     return `
-      <article class="lab-boundary service-boundary${guided ? ' is-guided' : ''}" data-drop-kind="service" data-target-id="${service.id}">
+      <article class="lab-boundary service-boundary${guided ? ' is-guided' : ''}${affectedBoundary ? ' is-affected' : ''}" data-drop-kind="service" data-target-id="${service.id}">
         <button class="boundary-handle${selected ? ' is-selected' : ''}" type="button" draggable="${!locked}" data-piece-kind="service" data-piece-id="${service.id}" data-drop-kind="service" data-target-id="${service.id}" aria-pressed="${selected}"${locked ? ' disabled' : ''}>
           <span><small>Microservice</small>${service.name}</span><span aria-hidden="true">⠿</span>
         </button>
@@ -696,6 +838,7 @@ const renderArchitectureBoard = (runtime, scenario, tutorial) => {
       <button class="new-boundary${newServiceGuided ? ' is-guided' : ''}" type="button" data-drop-kind="new-service"${locked ? ' disabled' : ''}>
         <span aria-hidden="true">＋</span><strong>New service</strong><small>Drop one responsibility here to extract it</small>
       </button>
+      ${renderArchitectureImpactMap(runtime, scenario)}
     </div>
   `;
 };
@@ -703,10 +846,57 @@ const renderArchitectureBoard = (runtime, scenario, tutorial) => {
 const getPersonById = (state, personId) => state.people.find((person) => person.id === personId);
 const getServiceById = (state, serviceId) => state.services.find((service) => service.id === serviceId);
 
+const getTeamImpactRows = (state) => {
+  const teamForPerson = {};
+  const ownerForService = {};
+  state.teams.forEach((team) => {
+    team.people.forEach((personId) => { teamForPerson[personId] = team; });
+    team.owns.forEach((serviceId) => { ownerForService[serviceId] = team; });
+  });
+
+  return state.people.flatMap((person) => Object.entries(person.contributions).map(([serviceId, count]) => {
+    const team = teamForPerson[person.id];
+    const owner = ownerForService[serviceId];
+    return {
+      personId: person.id,
+      personName: person.name,
+      serviceName: getServiceById(state, serviceId)?.name || serviceId,
+      teamName: team?.name || 'Unassigned',
+      ownerName: owner?.name || 'No owner',
+      count,
+      resolved: Boolean(team && owner && team.id === owner.id),
+    };
+  })).sort((left, right) => right.count - left.count);
+};
+
+const getPersonImpact = (runtime, personId) => {
+  if (!runtime.simulated) return null;
+  const matching = getTeamImpactRows(runtime.state).filter((row) => row.personId === personId);
+  return matching.some((row) => !row.resolved) ? 'remaining' : 'resolved';
+};
+
+const renderTeamImpactMap = (runtime) => {
+  if (!runtime.simulated) return '';
+  const rows = getTeamImpactRows(runtime.state);
+  return `
+    <section class="boundary-impact" aria-label="Team connections after the redesign">
+      <div class="boundary-impact-heading"><p class="evidence-heading">Work paths revealed after simulation</p><span>Green work stays with its owner</span></div>
+      <div class="boundary-impact-list">${rows.map((row, index) => `
+        <article class="boundary-impact-row ${row.resolved ? 'is-resolved' : 'is-remaining'}" style="--impact-index: ${index}">
+          <span class="impact-state" aria-hidden="true">${row.resolved ? '✓' : '→'}</span>
+          <div><strong>${row.personName} → ${row.serviceName}</strong><small>${row.count} saved ${row.count === 1 ? 'change' : 'changes'}</small></div>
+          <p>${row.resolved ? `Inside ${row.ownerName}'s ownership` : `${row.teamName} hands work to ${row.ownerName}`}</p>
+        </article>
+      `).join('')}</div>
+    </section>
+  `;
+};
+
 const renderTeamBoard = (runtime, scenario, tutorial) => {
   const locked = tutorial && runtime.tutorialActionComplete;
   const cards = runtime.state.teams.map((team) => {
     const selected = runtime.selected?.kind === 'team' && runtime.selected.id === team.id;
+    const affectedBoundary = isRecentlyAffected(runtime, 'team', team.id);
     const people = team.people.map((personId) => {
       const person = getPersonById(runtime.state, personId);
       const isSelected = runtime.selected?.kind === 'person' && runtime.selected.id === personId;
@@ -714,18 +904,21 @@ const renderTeamBoard = (runtime, scenario, tutorial) => {
       const contributions = Object.entries(person.contributions)
         .map(([serviceId, count]) => `${count} ${getServiceById(runtime.state, serviceId)?.name || serviceId}`)
         .join(' · ');
-      return `<li><button class="lab-piece person-piece${isSelected ? ' is-selected' : ''}${guided ? ' is-guided' : ''}" type="button" draggable="${!locked}" data-piece-kind="person" data-piece-id="${personId}" aria-pressed="${isSelected}"${locked ? ' disabled' : ''}><span><strong>${person.name}</strong><small>${contributions} changes</small></span><span aria-hidden="true">⋮⋮</span></button></li>`;
+      const impact = getPersonImpact(runtime, personId);
+      const affected = isRecentlyAffected(runtime, 'person', personId);
+      return `<li><button class="lab-piece person-piece${isSelected ? ' is-selected' : ''}${guided ? ' is-guided' : ''}${impact ? ` has-impact is-${impact}` : ''}${affected ? ' is-affected' : ''}" type="button" draggable="${!locked}" data-piece-kind="person" data-piece-id="${personId}" aria-pressed="${isSelected}"${locked ? ' disabled' : ''}><span><strong>${person.name}</strong><small>${contributions} changes</small></span>${impact ? `<small class="piece-impact">${impact === 'resolved' ? 'With owner' : 'Crosses ownership'}</small>` : '<span aria-hidden="true">⋮⋮</span>'}</button></li>`;
     }).join('');
     const ownership = team.owns.map((serviceId) => {
       const service = getServiceById(runtime.state, serviceId);
       const isSelected = runtime.selected?.kind === 'ownership' && runtime.selected.id === serviceId;
       const guided = tutorial && isGuidedSource(scenario, 'ownership', serviceId);
-      return `<li><button class="lab-piece ownership-piece${isSelected ? ' is-selected' : ''}${guided ? ' is-guided' : ''}" type="button" draggable="${!locked}" data-piece-kind="ownership" data-piece-id="${serviceId}" aria-pressed="${isSelected}"${locked ? ' disabled' : ''}><span aria-hidden="true">◆</span>Owns ${service?.name || serviceId}</button></li>`;
+      const affected = isRecentlyAffected(runtime, 'ownership', serviceId);
+      return `<li><button class="lab-piece ownership-piece${isSelected ? ' is-selected' : ''}${guided ? ' is-guided' : ''}${affected ? ' is-affected' : ''}" type="button" draggable="${!locked}" data-piece-kind="ownership" data-piece-id="${serviceId}" aria-pressed="${isSelected}"${locked ? ' disabled' : ''}><span aria-hidden="true">◆</span>Owns ${service?.name || serviceId}</button></li>`;
     }).join('') || '<li class="empty-ownership">No formal service ownership</li>';
     const guided = tutorial && (isGuidedSource(scenario, 'team', team.id) || isGuidedTarget(scenario, 'team', team.id));
 
     return `
-      <article class="lab-boundary team-boundary${guided ? ' is-guided' : ''}" data-drop-kind="team" data-target-id="${team.id}">
+      <article class="lab-boundary team-boundary${guided ? ' is-guided' : ''}${affectedBoundary ? ' is-affected' : ''}" data-drop-kind="team" data-target-id="${team.id}">
         <button class="boundary-handle${selected ? ' is-selected' : ''}" type="button" draggable="${!locked}" data-piece-kind="team" data-piece-id="${team.id}" data-drop-kind="team" data-target-id="${team.id}" aria-pressed="${selected}"${locked ? ' disabled' : ''}>
           <span><small>Team</small>${team.name}</span><span aria-hidden="true">⠿</span>
         </button>
@@ -744,6 +937,7 @@ const renderTeamBoard = (runtime, scenario, tutorial) => {
       <button class="new-boundary${newTeamGuided ? ' is-guided' : ''}" type="button" data-drop-kind="new-team"${locked ? ' disabled' : ''}>
         <span aria-hidden="true">＋</span><strong>New team</strong><small>Drop one ownership chip here to split its team</small>
       </button>
+      ${renderTeamImpactMap(runtime)}
     </div>
   `;
 };
@@ -775,12 +969,12 @@ const renderLabMetrics = (runtime, scenario, architecture) => {
 
   if (!runtime.simulated) {
     const baseline = architecture
-      ? `${before.coordination} cross-service changes · ${before.focus}% service focus · largest service ${before.largest}`
-      : `${before.handoffs} cross-team changes · ${before.alignment}% ownership alignment · highest team load ${before.load}`;
+      ? `${before.coordination} cross-service changes · ${before.focus}% service focus`
+      : `${before.handoffs} cross-team changes · ${before.alignment}% ownership alignment`;
     return `
       <div class="simulation-panel is-waiting">
         <div><p class="evidence-heading">Current release</p><strong>${baseline}</strong></div>
-        <p>Redesign the board, then simulate to compare the next release with this baseline.</p>
+        <div><p>Redesign the board, then simulate to compare the next release with this baseline.</p><small class="simulation-disclaimer">Illustrative simulation based on change-history patterns.</small></div>
       </div>
     `;
   }
@@ -802,12 +996,14 @@ const renderLabMetrics = (runtime, scenario, architecture) => {
       ['Teams', before.teams, after.teams, 'Formal team boundaries', 'context'],
     ];
 
-  const cards = metrics.map(([label, oldValue, newValue, help, direction]) => {
+  const renderMetricCard = ([label, oldValue, newValue, help, direction]) => {
     const oldNumber = Number.parseFloat(oldValue);
     const newNumber = Number.parseFloat(newValue);
     const improved = direction === 'lower' ? newNumber < oldNumber : direction === 'higher' ? newNumber > oldNumber : false;
     return `<div class="metric-card${improved ? ' is-improved' : ''}"><span>${label}</span><strong>${oldValue} <b aria-hidden="true">→</b> ${newValue}</strong><small>${help}</small></div>`;
-  }).join('');
+  };
+  const primaryCards = metrics.slice(0, 2).map(renderMetricCard).join('');
+  const secondaryCards = metrics.slice(2).map(renderMetricCard).join('');
 
   const goalMet = scenario.expected
     ? true
@@ -818,16 +1014,21 @@ const renderLabMetrics = (runtime, scenario, architecture) => {
   const narrative = scenario.expected
     ? scenario.result
     : goalMet
-      ? 'This design meets all three mission goals. It is one defensible solution—not the only possible one.'
+      ? 'This design meets the main goal and protects both guardrails. It is one defensible solution—not the only possible one.'
       : improvedPrimary
-        ? 'Your design reduces boundary-crossing work, but at least one goal still needs attention. Keep editing or continue when the trade-off feels justified.'
+        ? 'Your design reduces boundary-crossing work, but at least one guardrail still needs attention. Keep editing or continue when the trade-off feels justified.'
         : 'This design changes the structure, but recurring work still crosses the same boundaries. Try a more targeted move, or accept the trade-off and compare again.';
 
   return `
     <section class="simulation-panel has-result" aria-live="polite">
       <div class="simulation-heading"><p class="evidence-heading">Next-release simulation</p><strong>${goalMet || scenario.expected ? 'What changed' : 'Trade-off check'}</strong></div>
-      <div class="metric-grid">${cards}</div>
+      <div class="metric-grid">${primaryCards}</div>
+      <details class="secondary-metrics">
+        <summary>See structural trade-offs</summary>
+        <div class="metric-grid">${secondaryCards}</div>
+      </details>
       <p class="simulation-narrative">${narrative}</p>
+      <p class="simulation-disclaimer">Illustrative simulation based on observed change patterns. It explains trade-offs; it does not predict a real release.</p>
     </section>
   `;
 };
@@ -959,7 +1160,7 @@ const performLabAction = (stage, runtime, action) => {
     return;
   }
 
-  const snapshot = { state: cloneLabState(runtime.state), actions: [...runtime.actions] };
+  const snapshot = { state: cloneLabState(runtime.state), actions: [...runtime.actions], strategyActions: [...runtime.strategyActions] };
   const description = isArchitecturePhase(phase)
     ? applyArchitectureAction(runtime.state, action)
     : applyTeamAction(runtime.state, action);
@@ -973,6 +1174,8 @@ const performLabAction = (stage, runtime, action) => {
 
   runtime.history.push(snapshot);
   runtime.actions.push(description);
+  if (!tutorial) runtime.strategyActions.push(action.type);
+  runtime.lastAction = action;
   runtime.selected = null;
   runtime.simulated = false;
   runtime.tutorialActionComplete = tutorial;
@@ -1053,7 +1256,9 @@ const bindLabInteractions = (stage, runtime) => {
     if (!snapshot) return;
     runtime.state = snapshot.state;
     runtime.actions = snapshot.actions;
+    runtime.strategyActions = snapshot.strategyActions;
     runtime.selected = null;
+    runtime.lastAction = null;
     runtime.simulated = false;
     runtime.tutorialActionComplete = false;
     runtime.status = 'Last move undone. The board is ready for another decision.';
@@ -1064,7 +1269,9 @@ const bindLabInteractions = (stage, runtime) => {
     runtime.state = cloneLabState(runtime.initialState);
     runtime.history = [];
     runtime.actions = [];
+    runtime.strategyActions = [...runtime.strategyActionsAtLoad];
     runtime.selected = null;
+    runtime.lastAction = null;
     runtime.simulated = false;
     runtime.tutorialActionComplete = false;
     runtime.status = 'Board reset to the current-release structure.';
@@ -1073,6 +1280,7 @@ const bindLabInteractions = (stage, runtime) => {
 
   stage.querySelector('[data-lab-simulate]')?.addEventListener('click', () => {
     runtime.simulated = true;
+    runtime.lastAction = null;
     runtime.status = 'Simulation complete. Compare the current and next-release measures below.';
     renderCouplingLab(stage);
     stage.querySelector('.simulation-panel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1082,17 +1290,19 @@ const bindLabInteractions = (stage, runtime) => {
     if (phase.items && runtime.tutorialIndex < phase.items.length - 1) {
       runtime.tutorialIndex += 1;
     } else {
-      runtime.phaseIndex += 1;
+      runtime.phaseIndex += !runtime.guided && runtime.phaseIndex === 1 ? 2 : 1;
       runtime.tutorialIndex = 0;
     }
     if (runtime.phaseIndex >= couplingJourney.length) {
-      renderCouplingLabResult(stage);
+      renderCouplingLabResult(stage, runtime);
       return;
     }
     loadLabScenario(runtime);
     renderCouplingLab(stage);
     focusGameHeading(stage);
   });
+
+  stage.querySelector('[data-lab-finish]')?.addEventListener('click', () => renderCouplingLabResult(stage, runtime, true));
 };
 
 const renderCouplingLab = (stage) => {
@@ -1103,8 +1313,12 @@ const renderCouplingLab = (stage) => {
   const architecture = isArchitecturePhase(phase);
   const tutorialProgress = tutorial ? `<span>${runtime.tutorialIndex + 1} of ${phase.items.length} actions</span>` : '<span>No hints · any defensible solution</span>';
   const goals = scenario.objective
-    ? `<div class="lab-objectives"><p class="evidence-heading">Mission goals</p><ul>${scenario.objective.map((goal) => `<li>${goal}</li>`).join('')}</ul></div>`
+    ? `<div class="lab-mission-focus">
+        <div><p class="evidence-heading">Your main goal</p><strong>${scenario.objective[0]}</strong></div>
+        <details><summary>Keep two guardrails in mind</summary><ul>${scenario.objective.slice(1).map((goal) => `<li>${goal}</li>`).join('')}</ul></details>
+      </div>`
     : '';
+  const stakes = scenario.stakes ? `<div class="lab-stakes"><span>Release pressure</span><p>${scenario.stakes}</p></div>` : '';
   const lesson = tutorial ? `
     <div class="tutorial-callout">
       <p class="evidence-heading">Try this move</p>
@@ -1121,7 +1335,15 @@ const renderCouplingLab = (stage) => {
   const tools = architecture
     ? renderArchitectureTools(scenario, tutorial)
     : renderTeamTools(scenario, tutorial);
-  const terms = architecture ? renderArchitectureTerms() : renderTeamTerms();
+  const showFullTerms = tutorial && runtime.tutorialIndex === 0;
+  const terms = architecture ? renderArchitectureTerms(!showFullTerms) : renderTeamTerms(!showFullTerms);
+  const howTo = runtime.phaseIndex === 0 && runtime.tutorialIndex === 0 ? `
+    <div class="lab-howto" aria-label="How to play">
+      <div><strong>1 · Select</strong><span>Tap or click a movable item. On a computer, you can drag it instead.</span></div>
+      <div><strong>2 · Place</strong><span>Choose a destination on the board. The action guide shows what can move where.</span></div>
+      <div><strong>3 · Compare</strong><span>Use Undo or Reset freely, then simulate the next release to reveal the impact.</span></div>
+    </div>
+  ` : '<p class="lab-howto-compact"><strong>Play:</strong> select or drag an item, place it on a destination, then simulate to reveal the impact.</p>';
   const actionTrail = runtime.actions.length
     ? `<div class="action-trail" aria-label="Moves made"><span>Moves:</span>${runtime.actions.map((action) => `<small>${action}</small>`).join('')}</div>`
     : '';
@@ -1131,7 +1353,15 @@ const renderCouplingLab = (stage) => {
     ? 'Next training action'
     : runtime.phaseIndex === couplingJourney.length - 1
       ? 'Finish the lab'
+      : !runtime.guided && runtime.phaseIndex === 1
+        ? 'Continue to team mission'
       : `Continue to ${couplingJourney[runtime.phaseIndex + 1].label.toLowerCase()}`;
+  const completionActions = !phaseComplete ? '' : runtime.phaseIndex === 3 ? `
+    <div class="lab-completion-actions">
+      <button class="game-button" type="button" data-lab-finish>See my strategy profile</button>
+      <button class="lab-secondary-button" type="button" data-lab-next>Continue to optional challenges</button>
+    </div>
+  ` : `<button class="game-button game-next" type="button" data-lab-next>${nextLabel}</button>`;
 
   stage.innerHTML = `
     <div class="coupling-lab">
@@ -1140,6 +1370,7 @@ const renderCouplingLab = (stage) => {
         <div><p class="game-scenario-label">${scenario.label}</p><h4 tabindex="-1" data-game-focus>${scenario.title}</h4><p>${scenario.brief}</p></div>
         ${tutorialProgress}
       </div>
+      ${stakes}
       ${terms}
       ${goals}
       ${lesson}
@@ -1148,11 +1379,7 @@ const renderCouplingLab = (stage) => {
         ${evidence}
         <div class="workspace-heading board-heading"><div><p class="evidence-heading">2 · Redesign the boundaries</p><h5>Move the work—not an answer option.</h5></div><span>Drag, or select then choose a destination</span></div>
         ${tools}
-        <div class="lab-howto" aria-label="How to play">
-          <div><strong>1 · Select</strong><span>Tap or click a movable item. On a computer, you can drag it instead.</span></div>
-          <div><strong>2 · Place</strong><span>Choose a destination on the board. The action guide shows what can move where.</span></div>
-          <div><strong>3 · Compare</strong><span>Use Undo or Reset freely, then simulate the next release to reveal the impact.</span></div>
-        </div>
+        ${howTo}
         <p class="lab-status" aria-live="polite">${runtime.status}</p>
         ${board}
         ${actionTrail}
@@ -1162,33 +1389,150 @@ const renderCouplingLab = (stage) => {
           <button class="game-button" type="button" data-lab-simulate${canSimulate ? '' : ' disabled'}>${runtime.simulated ? 'Simulate again' : 'Simulate next release'}</button>
         </div>
         ${renderLabMetrics(runtime, scenario, architecture)}
-        ${phaseComplete ? `<button class="game-button game-next" type="button" data-lab-next>${nextLabel}</button>` : ''}
+        ${completionActions}
       </section>
     </div>
   `;
 
   bindLabInteractions(stage, runtime);
+  runtime.lastAction = null;
 };
 
-const renderCouplingLabResult = (stage) => {
+const getCouplingStrategyProfile = (actions) => {
+  const counts = actions.reduce((result, action) => ({ ...result, [action]: (result[action] || 0) + 1 }), {});
+  const approaches = [
+    {
+      label: 'Focused refactoring',
+      score: (counts['move-responsibility'] || 0) + (counts['split-service'] || 0),
+      description: 'You preferred moving the smallest meaningful piece of work, keeping most boundaries intact.',
+      tradeoff: 'This preserves independence, but each extracted or relocated responsibility still needs a clear interface and owner.',
+    },
+    {
+      label: 'Boundary simplification',
+      score: (counts['merge-service'] || 0) + (counts['merge-team'] || 0),
+      description: 'You reduced coordination by removing boundaries around work that repeatedly moves together.',
+      tradeoff: 'Fewer handoffs can make delivery easier, while larger services or teams need their scope watched carefully.',
+    },
+    {
+      label: 'Team realignment',
+      score: (counts['move-person'] || 0) + (counts['transfer-ownership'] || 0) + (counts['split-team'] || 0),
+      description: 'You brought formal responsibility closer to the people who actually perform the work.',
+      tradeoff: 'Alignment improves, but team moves also transfer knowledge, relationships, access, and operational duties.',
+    },
+  ];
+  const highest = Math.max(0, ...approaches.map((approach) => approach.score));
+  const leaders = approaches.filter((approach) => approach.score === highest && highest > 0);
+  if (leaders.length === 1) return { ...leaders[0], actionCount: actions.length };
+  return {
+    label: 'Balanced boundary designer',
+    description: 'You combined structural and organizational moves instead of treating one kind of boundary as the whole problem.',
+    tradeoff: 'A mixed strategy can fit the evidence well; its value depends on making every new boundary and responsibility explicit.',
+    actionCount: actions.length,
+  };
+};
+
+const renderCouplingLabResult = (stage, runtime, canExploreAdvanced = false) => {
+  const profile = getCouplingStrategyProfile(runtime.strategyActions);
   stage.innerHTML = `
     <div class="game-result lab-result">
       <div class="game-result-mark" aria-hidden="true">↔</div>
-      <p class="game-kicker">Lab complete</p>
-      <h4 tabindex="-1" data-game-focus>You changed the boundaries—not just the diagram.</h4>
-      <p>Logical coupling reveals software that repeatedly changes together. Organizational coupling reveals when the real work repeatedly crosses team ownership. Neither metric dictates one answer; both make trade-offs visible before the next redesign.</p>
-      <button class="game-button" type="button" data-game-restart>Run the lab again</button>
+      <p class="game-kicker">Your strategy profile · ${profile.actionCount} ${profile.actionCount === 1 ? 'move' : 'moves'}</p>
+      <h4 tabindex="-1" data-game-focus>${profile.label}</h4>
+      <p>${profile.description}</p>
+      <div class="strategy-tradeoff"><strong>The trade-off to remember</strong><span>${profile.tradeoff}</span></div>
+      <p class="lab-result-summary">Logical coupling reveals software that repeatedly changes together. Organizational coupling reveals when real work repeatedly crosses team ownership. Neither metric dictates one answer; both make trade-offs visible.</p>
+      <div class="lab-result-actions">
+        <button class="game-button" type="button" data-game-restart>Try another strategy</button>
+        ${canExploreAdvanced ? '<button class="lab-secondary-button" type="button" data-lab-explore>Explore optional challenges</button>' : ''}
+      </div>
     </div>
   `;
-  stage.querySelector('[data-game-restart]').addEventListener('click', () => startCouplingLab(stage));
+  stage.querySelector('[data-game-restart]').addEventListener('click', () => renderCouplingLabEntry(stage));
+  stage.querySelector('[data-lab-explore]')?.addEventListener('click', () => {
+    runtime.phaseIndex = 4;
+    runtime.tutorialIndex = 0;
+    loadLabScenario(runtime);
+    renderCouplingLab(stage);
+    focusGameHeading(stage);
+  });
   focusGameHeading(stage);
 };
 
-const startCouplingLab = (stage) => {
-  const runtime = { phaseIndex: 0, tutorialIndex: 0 };
+const startCouplingLab = (stage, { guided = true } = {}) => {
+  const runtime = { phaseIndex: guided ? 0 : 1, tutorialIndex: 0, guided, strategyActions: [] };
   couplingLabState.set(stage, runtime);
   loadLabScenario(runtime);
   renderCouplingLab(stage);
+  focusGameHeading(stage);
+};
+
+const renderCouplingLabStory = (stage) => {
+  clearCouplingStory(stage);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    renderCouplingLabEntry(stage);
+    return;
+  }
+
+  stage.innerHTML = `
+    <div class="lab-story" tabindex="-1" data-game-focus aria-label="A short story about hidden connections between microservices">
+      <button class="lab-story-skip" type="button" data-story-skip>Skip intro</button>
+      <div class="lab-story-frame" data-story-content role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="lab-story-progress" aria-hidden="true"><span data-story-progress></span></div>
+    </div>
+  `;
+
+  let sceneIndex = 0;
+  const content = stage.querySelector('[data-story-content]');
+  const progress = stage.querySelector('[data-story-progress]');
+
+  const showScene = () => {
+    const scene = couplingStoryScenes[sceneIndex];
+    content.innerHTML = `
+      <div class="lab-story-scene">
+        <p>${scene.kicker}</p>
+        <h4>${scene.line}</h4>
+        <strong>${scene.accent}</strong>
+      </div>
+    `;
+    progress.style.width = `${((sceneIndex + 1) / couplingStoryScenes.length) * 100}%`;
+    const timer = window.setTimeout(() => {
+      sceneIndex += 1;
+      if (sceneIndex >= couplingStoryScenes.length) {
+        renderCouplingLabEntry(stage);
+      } else {
+        showScene();
+      }
+    }, scene.duration);
+    couplingStoryTimers.set(stage, timer);
+  };
+
+  stage.querySelector('[data-story-skip]').addEventListener('click', () => renderCouplingLabEntry(stage));
+  showScene();
+  focusGameHeading(stage);
+};
+
+const renderCouplingLabEntry = (stage) => {
+  clearCouplingStory(stage);
+  stage.innerHTML = `
+    <div class="lab-entry">
+      <div class="lab-entry-heading">
+        <p class="game-kicker">Choose your route</p>
+        <h4 tabindex="-1" data-game-focus>Redesign what changes together.</h4>
+        <p>No software-engineering background is required. The evidence comes from saved code changes; you decide where the service and team boundaries should go.</p>
+      </div>
+      <div class="lab-entry-chapters" aria-label="Coupling Lab chapters">
+        <article><span>Chapter 1</span><strong>Service boundaries</strong><p>Spot separate programs that repeatedly need the same changes, then reorganize their responsibilities.</p></article>
+        <article><span>Chapter 2</span><strong>Team boundaries</strong><p>Compare formal ownership with who actually changes the code, then realign people or responsibility.</p></article>
+      </div>
+      <div class="lab-entry-actions">
+        <button class="game-button" type="button" data-lab-entry-guided><strong>Start guided tutorial</strong><span>Learn every move, then play both missions</span></button>
+        <button class="lab-secondary-button" type="button" data-lab-entry-mission><strong>I know the basics — start the mission</strong><span>Skip practice and solve both boards</span></button>
+      </div>
+      <p class="lab-entry-optional"><strong>Optional after the two missions:</strong> two advanced cases with noisier evidence and more ambiguous trade-offs.</p>
+    </div>
+  `;
+  stage.querySelector('[data-lab-entry-guided]').addEventListener('click', () => startCouplingLab(stage));
+  stage.querySelector('[data-lab-entry-mission]').addEventListener('click', () => startCouplingLab(stage, { guided: false }));
   focusGameHeading(stage);
 };
 
@@ -1296,7 +1640,7 @@ document.querySelectorAll('[data-game]').forEach((game) => {
 
   startButton.addEventListener('click', () => {
     if (game.dataset.game === 'coupling') {
-      startCouplingLab(stage);
+      renderCouplingLabStory(stage);
     } else if (game.dataset.game === 'testing') {
       renderTestingRound(stage, 0, 0);
     }
