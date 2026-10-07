@@ -1,95 +1,284 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Dario Amoroso d&apos;Aragona</title>
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Academic icon (free version)-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publications — Dario Amoroso d'Aragona</title>
+  <meta name="description" content="Publications, dissertation, registered reports, and research datasets by Dario Amoroso d'Aragona.">
+  <link rel="canonical" href="https://damorosodaragona.github.io/publications.html">
+  <meta name="theme-color" content="#0c1631">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=20261006-3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261007-1">
+  <script src="assets/js/site.js?v=20261007-1" defer></script>
 </head>
-<!-- Navigation bar-->
-<div id="nav-placeholder"></div>
-<script>
-    $(function () {
-        $('#nav-placeholder').load('navigation.html');
-    });
-</script>
-<!-- end of Navigation bar-->
-<!-- Education-->
-<!-- Experience-->
-<section class="resume-section" id="experience">
-    <div class="resume-section-content">
-        <h2 class="mb-5">Publications</h2>
-        <h2 class="subheading mb-3">Conferences</h2>
-        <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-            <div class="flex-grow-1">
-                <ul class="fa-ul mb-0">
-                    <li>
-                        <details class="mb-2">
-                            <summary><span class="subheading mb-0">CATTO: Just-in-time Test Case Selection and Execution</span></summary>
-                            <em>
-                                <b>Abstract:</b>
-                                Regression testing wants to prevent that errors, which have already been corrected once, creep back into a system that has been updated. A na &#x308;&imath;ve approach consists of re-running the entire test suite (TS) against the changed version of the software under test (SUT). However, this might result in a time- and resource-consuming process; e.g., when dealing with large and/or complex SUTs and TSs. To avoid this problem, Test Case Selection (TCS) approaches can be used. This kind of approaches build a temporary TS comprising only those test cases (TCs) that are relevant to the changes made to the SUT, so avoiding executing unnecessary TCs. In this paper, we introduce CATTO (Commit Adaptive Tool for Test suite Optimization), a tool implementing a TCS strategy for SUTs written in Java as well as a wrapper to allow developers to use CATTO within IntelliJ IDEA and to execute CATTO just-in-time before committing changes to the repository. We conducted
-                                a preliminary evaluation of CATTO on seven open-source Java projects to evaluate the reduction of the test-suite size, the loss of fault-revealing TCs, and the loss of fault-detection capability. The results suggest that CATTO can be of help to developers when performing TCS. The video demo and the documentation of the tool is available at: https://catto-tool.github.io/
-                            </em>
-                        </details>
-                        <p class="mb-1">D. Amoroso d&apos;Aragona, F. Pecorelli, S. Romano, G. Scanniello, M. T. Baldassarre, A. Janes, V. Lenarduzzi</p>
-                        <p class="mb-3">38th IEEE International Conference on Software Maintenance and Evolution, Limassul, Cyprus - 2022</p>
-                        <div class="flex-shrink-0">
-                            <a href="assets/publications/CATTO Just-in-time Test Case Selection and Execution.pdf" download="CATTO Just-in-time Test Case Selection and Execution.pdf">Download</a>
-                            <a href="https://arxiv.org/abs/2206.08718" target="_blank">Link</a>
-                        </div>
-                    </li>
-                    <br />
-                    <li>
-                        <details class="mb-2">
-                            <summary><span class="subheading mb-0">Machine Learning-Based Test Smell Detection</span></summary>
-                            <em>
-                                <b>Abstract:</b>
-                                &mdash;Context: Test smells are symptoms of sub-optimal design choices adopted when developing test cases. Previous studies have proved their harmfulness for test code maintainability and effectiveness. Therefore, researchers have been proposing automated, heuristic-based techniques to detect them. However, the performance of such detectors is still limited and dependent on thresholds to be tuned. Objective: We propose the design and experimentation of a novel test smell detection approach based on machine learning to detect four test smells. Method: We plan to develop the largest dataset of manuallyvalidated test smells. This dataset will be leveraged to train six machine learners and assess their capabilities in within- and cross-project scenarios. Finally, we plan to compare our approach with state-of-the-art heuristic-based techniques.
-                            </em>
-                        </details>
-                        <p class="mb-1">V. Pontillo, D. Amoroso d&rsquo;Aragona, F. Pecorelli D. Di Nucci, F. Ferrucci, F. Palomba</p>
-                        <p class="mb-3">38th IEEE International Conference on Software Maintenance and Evolution, Limassul, Cyprus - 2022</p>
-                        <div class="flex-shrink-0">
-                            <a href="assets/publications/Machine Learning-Based Test Smell Detection.pdf" download="Machine Learning-Based Test Smell Detection.pdf">Download</a>
-                            <a href="https://arxiv.org/abs/2208.07574" target="_blank">Link</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!--<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-<div class="flex-grow-1">
-<h3 class="mb-0">Web Developer</h3>
-<div class="subheading mb-3">Intelitec Solutions</div>
-<p>Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.</p>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">December 2011 - March 2013</span></div>
-</div>
-<div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-<div class="flex-grow-1">
-<h3 class="mb-0">Junior Web Designer</h3>
-<div class="subheading mb-3">Shout! Media Productions</div>
-<p>Podcasting operational change management inside of workflows to establish a framework. Taking seamless key performance indicators offline to maximise the long tail. Keeping your eye on the ball while performing a deep dive on the start-up mentality to derive convergence on cross-platform integration.</p>
-</div>
-<div class="flex-shrink-0"><span class="text-primary">July 2010 - December 2011</span></div>
-</div>
-<div class="d-flex flex-column flex-md-row justify-content-between">
-<div class="flex-grow-1">
-<h3 class="mb-0">Web Design Intern</h3>
-<div class="subheading mb-3">Shout! Media Productions</div>
-<p>Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits. Dramatically visualize customer directed convergence without revolutionary ROI.</p>
-</div>-->
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="wordmark" href="index.html" aria-label="Dario Amoroso d'Aragona, home">
+        <span class="wordmark-mark" aria-hidden="true">DA</span>
+        <span class="wordmark-name">Dario Amoroso d'Aragona</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span>Menu</span>
+        <span class="nav-toggle-lines" aria-hidden="true"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#research-arcade">Play</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="publications.html" aria-current="page">Publications</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
     </div>
-</section>
+  </header>
+
+  <main id="main">
+    <section class="publications-hero section-pad">
+      <div class="shell publication-hero-grid">
+        <div class="reveal">
+          <p class="eyebrow">Publication record · 2022—2026</p>
+          <h1>Research on software systems, <span>grounded in evidence.</span></h1>
+        </div>
+        <p class="hero-lede reveal">Peer-reviewed work, a doctoral dissertation, registered reports, and research datasets across microservice architecture, software quality, testing, technical debt, and AI-assisted development.</p>
+      </div>
+    </section>
+
+    <section class="publication-record section-pad" aria-labelledby="record-title">
+      <div class="shell">
+        <div class="publication-toolbar reveal">
+          <div>
+            <p class="section-index">Complete record</p>
+            <h2 id="record-title">Publications and manuscripts</h2>
+          </div>
+          <div class="filter-group" aria-label="Filter publications">
+            <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="filter-button" data-filter="journal" aria-pressed="false">Journals</button>
+            <button type="button" class="filter-button" data-filter="conference" aria-pressed="false">Conferences</button>
+            <button type="button" class="filter-button" data-filter="other" aria-pressed="false">Other outputs</button>
+          </div>
+        </div>
+
+        <div class="year-group" data-publication-group>
+          <h3 class="year-heading">2026</h3>
+          <div class="publication-list">
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://conf.researchr.org/details/ecsa-2026/ecsa-2026-esocc/8/Balancing-Personality-and-Technical-Expertise-in-Microservice-Teams-An-Algorithmic-A" target="_blank" rel="noopener">Balancing Personality and Technical Expertise in Microservice Teams: An Algorithmic Approach</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Fabio Calefato, Davide Taibi</p>
+                <p class="venue">European Conference on Service-Oriented and Cloud Computing (ESOCC)</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="other">
+              <div class="publication-kind">Doctoral dissertation</div>
+              <div>
+                <h4><a href="https://urn.fi/URN:ISBN:978-952-03-4709-3" target="_blank" rel="noopener">Microservices Logical Coupling: Measurement, Evolution, and Organizational Implications</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong></p>
+                <p class="venue">Tampere University Dissertations, vol. 1563 · ISBN 978-952-03-4709-3</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="other">
+              <div class="publication-kind">Submitted manuscript</div>
+              <div>
+                <h4>MLCI: Microservice Logical Coupling Intensity</h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Michele Esposito, Luca Pascarella, Andrea Janes, Valentina Lenarduzzi, Rafael Peñaloza, Davide Taibi</p>
+                <p class="venue">Submitted to IEEE Transactions on Software Engineering · decision pending</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="year-group" data-publication-group>
+          <h3 class="year-heading">2025</h3>
+          <div class="publication-list">
+            <article class="publication-entry reveal" data-publication-type="journal">
+              <div class="publication-kind">Journal article</div>
+              <div>
+                <h4><a href="https://doi.org/10.1007/s00607-025-01454-7" target="_blank" rel="noopener">Exploring Microservice Ownership and Organizational Coupling in Open-Source Projects: An Empirical Study</a></h4>
+                <p class="authors">Xiaozhou Li, <strong>Dario Amoroso d'Aragona</strong>, Tomas Cerny, Valentina Lenarduzzi, Davide Taibi, Andrea Janes</p>
+                <p class="venue">Computing 107(4), article 102</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="year-group" data-publication-group>
+          <h3 class="year-heading">2024</h3>
+          <div class="publication-list">
+            <article class="publication-entry reveal" data-publication-type="journal">
+              <div class="publication-kind">Journal article</div>
+              <div>
+                <h4><a href="https://doi.org/10.1007/s10664-023-10436-2" target="_blank" rel="noopener">Machine Learning-Based Test Smell Detection</a></h4>
+                <p class="authors">Valeria Pontillo, <strong>Dario Amoroso d'Aragona</strong>, Fabiano Pecorelli, Dario Di Nucci, Filomena Ferrucci, Fabio Palomba</p>
+                <p class="venue">Empirical Software Engineering 29(2), article 55</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Data paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1145/3643991.3644890" target="_blank" rel="noopener">A Dataset of Microservices-Based Open-Source Projects</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Alexander Bakhtin, Xiaozhou Li, Ruoyu Su, Lauren Adams, et al.</p>
+                <p class="venue">21st IEEE/ACM International Conference on Mining Software Repositories (MSR), pp. 504–509</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Workshop paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1145/3643657.3643912" target="_blank" rel="noopener">Understanding the Causes of Microservice Logical Coupling: An Exploratory Study</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Xiaozhou Li, Andrea Janes</p>
+                <p class="venue">1st International Workshop on New Trends in Software Architecture (SATrends), pp. 14–17</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1007/978-3-031-66326-0_19" target="_blank" rel="noopener">Evolution and Anti-Patterns Visualized: MicroProspect in Microservice Architecture</a></h4>
+                <p class="authors">Lauren Adams, Amr S. Abdelfattah, Md Showkat Hossain Chy, Samantha Perry, Patrick Harris, Tomas Cerny, <strong>Dario Amoroso d'Aragona</strong>, Davide Taibi</p>
+                <p class="venue">Software Architecture · ECSA Tracks, Workshops, and Doctoral Symposium, LNCS 14590, pp. 309–325</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="year-group" data-publication-group>
+          <h3 class="year-heading">2023</h3>
+          <div class="publication-list">
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1109/SANER56733.2023.00095" target="_blank" rel="noopener">Technical Debt Diffuseness in the Apache Ecosystem: A Differentiated Replication</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Fabiano Pecorelli, Maria Teresa Baldassarre, Davide Taibi, Valentina Lenarduzzi</p>
+                <p class="venue">IEEE International Conference on Software Analysis, Evolution and Reengineering (SANER), pp. 825–833</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1109/SOSE58276.2023.00007" target="_blank" rel="noopener">Analyzing Organizational Structure of Microservice Projects Based on Contributor Collaboration</a></h4>
+                <p class="authors">Xiaozhou Li, Amr S. Abdelfattah, Jorge Yero, <strong>Dario Amoroso d'Aragona</strong>, Tomas Cerny, Davide Taibi</p>
+                <p class="venue">IEEE International Conference on Service-Oriented System Engineering (SOSE), pp. 1–8</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1007/978-3-031-49266-2_30" target="_blank" rel="noopener">Evaluating Microservice Organizational Coupling Based on Cross-Service Contribution</a></h4>
+                <p class="authors">Xiaozhou Li, <strong>Dario Amoroso d'Aragona</strong>, Davide Taibi</p>
+                <p class="venue">Product-Focused Software Process Improvement (PROFES), LNCS 14483, pp. 435–450</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1109/ICSA-C57050.2023.00028" target="_blank" rel="noopener">Microservice Logical Coupling: A Preliminary Validation</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Luca Pascarella, Andrea Janes, Valentina Lenarduzzi, Davide Taibi</p>
+                <p class="venue">IEEE International Conference on Software Architecture Companion (ICSA-C), pp. 81–85</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Conference paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1007/978-3-031-46235-1_2" target="_blank" rel="noopener">One Microservice per Developer: Is This the Trend in OSS?</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Xiaozhou Li, Tomas Cerny, Andrea Janes, Valentina Lenarduzzi, Davide Taibi</p>
+                <p class="venue">Service-Oriented and Cloud Computing (ESOCC), pp. 19–34</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Best paper</div>
+              <div>
+                <h4><a href="https://www.conf-micro.services/2023/papers/08-adams-chatgpt.pdf" target="_blank" rel="noopener">ChatGPT for Microservice Development: How Far Can We Go?</a></h4>
+                <p class="authors">Lauren Adams, Francis Boyle, Patrick Boyle, <strong>Dario Amoroso d'Aragona</strong>, Tomas Cerny, Davide Taibi</p>
+                <p class="venue">International Conference on Microservices · Best Paper Award</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="other">
+              <div class="publication-kind">Registered report</div>
+              <div>
+                <h4><a href="https://arxiv.org/abs/2306.02036" target="_blank" rel="noopener">On the Empirical Evidence of Microservice Logical Coupling</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Luca Pascarella, Andrea Janes, Valentina Lenarduzzi, Rafael Peñaloza, Davide Taibi</p>
+                <p class="venue">arXiv:2306.02036</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="other">
+              <div class="publication-kind">Registered report</div>
+              <div>
+                <h4><a href="https://arxiv.org/abs/2305.00760" target="_blank" rel="noopener">Breaks and Code Quality: Investigating the Impact of Forgetting on Software Development</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Luca Pascarella, Andrea Janes, Valentina Lenarduzzi, Rafael Peñaloza, Davide Taibi</p>
+                <p class="venue">arXiv:2305.00760</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="year-group" data-publication-group>
+          <h3 class="year-heading">2022</h3>
+          <div class="publication-list">
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Doctoral symposium</div>
+              <div>
+                <h4><a href="https://doi.org/10.1007/978-3-031-21388-5_49" target="_blank" rel="noopener">Architectural Degradation and Technical Debt Dashboards</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong></p>
+                <p class="venue">Product-Focused Software Process Improvement (PROFES), pp. 638–643</p>
+              </div>
+            </article>
+            <article class="publication-entry reveal" data-publication-type="conference">
+              <div class="publication-kind">Tool paper</div>
+              <div>
+                <h4><a href="https://doi.org/10.1109/ICSME55016.2022.00059" target="_blank" rel="noopener">CATTO: Just-in-Time Test Case Selection and Execution</a></h4>
+                <p class="authors"><strong>Dario Amoroso d'Aragona</strong>, Fabiano Pecorelli, Simone Romano, Giuseppe Scanniello, Maria Teresa Baldassarre, Andrea Janes, Valentina Lenarduzzi</p>
+                <p class="venue">IEEE International Conference on Software Maintenance and Evolution (ICSME), pp. 459–463</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="datasets section-pad" aria-labelledby="datasets-title">
+      <div class="shell two-column-section">
+        <div class="section-heading reveal">
+          <p class="section-index">Research artifacts</p>
+          <h2 id="datasets-title">Datasets and reproducible outputs.</h2>
+          <p>Public artifacts supporting empirical research on microservice systems.</p>
+        </div>
+        <div class="dataset-list reveal">
+          <a href="https://doi.org/10.6084/m9.figshare.24722163" target="_blank" rel="noopener">
+            <span>Microservices Dataset</span>
+            <strong>Complete version</strong>
+            <small>Figshare · 2024</small>
+          </a>
+          <a href="https://doi.org/10.6084/m9.figshare.24722232" target="_blank" rel="noopener">
+            <span>Microservices Dataset</span>
+            <strong>Filtered version</strong>
+            <small>Figshare · 2024</small>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact section-pad" aria-labelledby="contact-title">
+      <div class="shell contact-card reveal">
+        <p class="section-index">Research profiles</p>
+        <h2 id="contact-title">Follow the work.</h2>
+        <p>For citation counts and the latest indexing updates, visit Google Scholar. For collaboration or questions, get in touch directly.</p>
+        <div class="contact-actions">
+          <a class="button button-light" href="https://scholar.google.com/citations?user=l-gOe7cAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+          <a class="button button-outline-light" href="mailto:darioamorosodaragona@gmail.com">Email me</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© <span data-current-year>2026</span> Dario Amoroso d'Aragona</p>
+      <a href="index.html">Back to home</a>
+    </div>
+  </footer>
+</body>
+</html>
