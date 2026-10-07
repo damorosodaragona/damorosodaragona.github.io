@@ -11,12 +11,12 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://damorosodaragona.github.io/">
   <meta name="theme-color" content="#0c1631">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=20261006-1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg?v=20261006-3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261006-1">
-  <script src="assets/js/site.js?v=20261006-1" defer></script>
+  <link rel="stylesheet" href="assets/css/site.css?v=20261007-3">
+  <script src="assets/js/site.js?v=20261007-4" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -33,6 +33,7 @@
       </button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
         <a href="#work">Work</a>
+        <a href="#research-arcade">Play</a>
         <a href="#experience">Experience</a>
         <a href="publications.html">Publications</a>
         <a href="#contact">Contact</a>
@@ -61,7 +62,7 @@
 
         <aside class="hero-portrait reveal" aria-label="Profile summary">
           <div class="portrait-frame">
-            <img src="assets/img/profile.jpg?v=20261006-1" alt="Portrait of Dario Amoroso d'Aragona" width="500" height="500">
+            <img src="assets/img/profile.jpg?v=20261006-3" alt="Portrait of Dario Amoroso d'Aragona" width="500" height="500">
           </div>
           <div class="availability-card">
             <span class="signal" aria-hidden="true"></span>
@@ -176,10 +177,64 @@
       </div>
     </section>
 
+    <section id="research-arcade" class="research-arcade section-pad" aria-labelledby="arcade-title">
+      <div class="shell">
+        <div class="section-heading section-heading-split reveal">
+          <div>
+            <p class="section-index">03 / Try the research</p>
+            <h2 id="arcade-title">Two experiments. Real engineering trade-offs.</h2>
+          </div>
+          <p>Learn the ideas through guided examples, then change a software system yourself. No software-engineering background required.</p>
+        </div>
+
+        <div class="arcade-grid">
+          <article class="game-card game-card-coupling reveal" data-game="coupling">
+            <header class="game-header">
+              <div class="game-meta"><span>Architecture + teams</span><span>Interactive lab · ~8 min</span></div>
+              <div class="game-symbol" aria-hidden="true">↔</div>
+              <h3>Coupling Lab</h3>
+              <p>Read software history, redesign services and teams, then simulate the impact of your decisions.</p>
+            </header>
+            <div class="game-stage" data-game-stage>
+              <div class="game-intro">
+                <p class="game-kicker">Your mission</p>
+                <p>Start with a hands-on tutorial. You will merge and split services, move responsibilities and people, change ownership, and see when each action helps—or creates a new problem.</p>
+                <button class="game-button" type="button" data-game-start>Enter the Coupling Lab</button>
+              </div>
+            </div>
+            <footer class="game-footer">
+              <span>Based on MLCI and organizational coupling research</span>
+              <a href="https://urn.fi/URN:ISBN:978-952-03-4709-3" target="_blank" rel="noopener">Research context <span aria-hidden="true">↗</span></a>
+            </footer>
+          </article>
+
+          <article class="game-card game-card-testing reveal" data-game="testing">
+            <header class="game-header">
+              <div class="game-meta"><span>Software testing</span><span>6 rounds · ~4 min</span></div>
+              <div class="game-symbol" aria-hidden="true">✓</div>
+              <h3>Test Suite Challenge</h3>
+              <p>Change one production method, trace which tests touch it, and avoid waiting for the full suite.</p>
+            </header>
+            <div class="game-stage" data-game-stage>
+              <div class="game-intro">
+                <p class="game-kicker">Your mission</p>
+                <p>Find the tests that matter. Save time without missing a bug.</p>
+                <button class="game-button" type="button" data-game-start>Play the 20-minute test challenge</button>
+              </div>
+            </div>
+            <footer class="game-footer">
+              <span>Inspired by CATTO</span>
+              <a href="https://catto-tool.github.io/" target="_blank" rel="noopener">Explore the tool <span aria-hidden="true">↗</span></a>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section id="experience" class="experience section-pad" aria-labelledby="experience-title">
       <div class="shell experience-layout">
         <div class="section-heading sticky-heading reveal">
-          <p class="section-index">03 / Experience</p>
+          <p class="section-index">04 / Experience</p>
           <h2 id="experience-title">Research, engineering, and technology transfer.</h2>
           <p>International experience connecting academic questions with industrial constraints and maintainable software.</p>
         </div>
@@ -217,7 +272,7 @@
       <div class="shell">
         <div class="section-heading section-heading-split reveal">
           <div>
-            <p class="section-index">04 / Publications</p>
+            <p class="section-index">05 / Publications</p>
             <h2 id="publication-title">Selected research outputs.</h2>
           </div>
           <p>Peer-reviewed research on microservices, software quality, technical debt, testing, developer organisation, and AI-assisted development.</p>
@@ -256,7 +311,7 @@
     <section class="education-service section-pad" aria-labelledby="education-title">
       <div class="shell two-column-section">
         <div class="reveal">
-          <p class="section-index">05 / Education</p>
+          <p class="section-index">06 / Education</p>
           <h2 id="education-title">Academic training.</h2>
           <div class="compact-list">
             <article>
@@ -285,7 +340,7 @@
 
     <section id="contact" class="contact section-pad" aria-labelledby="contact-title">
       <div class="shell contact-card reveal">
-        <p class="section-index">06 / Contact</p>
+        <p class="section-index">07 / Contact</p>
         <h2 id="contact-title">Interested in research, applied AI, or software architecture?</h2>
         <p>I'm open to conversations about research collaboration, technology transfer, software engineering, and AI-assisted development.</p>
         <div class="contact-actions">
