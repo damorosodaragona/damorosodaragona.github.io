@@ -302,61 +302,197 @@ const couplingJourney = [
 
 const testingRounds = [
   {
-    label: 'Checkout change',
-    brief: 'Changed <code>OrderService.calculateTotal()</code>. Impact trace: Checkout → Order → Inventory.',
-    budget: 12,
-    impactPath: [
-      ['Checkout', false],
-      ['Order', true],
-      ['Inventory', false],
+    label: 'Round 1 · Pricing guard',
+    title: 'Stop a discount from producing a negative total.',
+    ticket: 'The requested change is in <code>applyDiscount()</code>. Find and click that production method.',
+    targetMethod: 'apply-discount',
+    fullSuiteTests: 345,
+    fullSuiteDuration: 1200,
+    methods: [
+      { id: 'cart-subtotal', name: 'cartSubtotal()', area: 'Cart', summary: 'Adds the prices in the basket.' },
+      { id: 'apply-discount', name: 'applyDiscount()', area: 'Pricing', summary: 'Subtracts a coupon from the subtotal.' },
+      { id: 'calculate-tax', name: 'calculateTax()', area: 'Pricing', summary: 'Calculates tax for the final price.' },
+      { id: 'reserve-stock', name: 'reserveStock()', area: 'Inventory', summary: 'Reserves the purchased items.' },
+      { id: 'send-receipt', name: 'sendReceipt()', area: 'Email', summary: 'Sends the purchase receipt.' },
+      { id: 'load-profile', name: 'loadProfile()', area: 'Account', summary: 'Loads a customer profile.' },
+      { id: 'write-audit', name: 'writeAuditLog()', area: 'Platform', summary: 'Records an operational event.' },
     ],
+    diff: {
+      before: 'return subtotal - discount;',
+      after: 'return Math.max(0, subtotal - discount);',
+      explanation: 'The price can no longer fall below zero. Any test that calls this method could detect a regression.',
+    },
     tests: [
-      ['OrderServiceTest', 3, true],
-      ['InventoryContractTest', 4, true],
-      ['CheckoutFlowTest', 5, true],
-      ['PaymentGatewayIT', 6, false],
-      ['NotificationTemplateTest', 2, false],
-      ['UserProfileTest', 3, false],
+      { id: 'profile-loads', name: 'profile_preferences_load()', duration: 14, touches: ['load-profile'] },
+      { id: 'discount-applied', name: 'discount_is_applied()', duration: 16, touches: ['apply-discount'] },
+      { id: 'audit-written', name: 'audit_event_is_written()', duration: 11, touches: ['write-audit'] },
+      { id: 'checkout-coupon', name: 'checkout_total_with_coupon()', duration: 28, touches: ['cart-subtotal', 'apply-discount', 'calculate-tax'] },
+      { id: 'stock-reserved', name: 'stock_is_reserved()', duration: 18, touches: ['reserve-stock'] },
+      { id: 'negative-total', name: 'negative_total_guard()', duration: 12, touches: ['apply-discount'] },
+      { id: 'receipt-total', name: 'receipt_contains_total()', duration: 22, touches: ['cart-subtotal', 'send-receipt'] },
     ],
-    explanation: 'The focused Order, Inventory, and Checkout tests cover the impacted path in exactly 12 seconds.',
+    resultExplanation: 'These three tests call the changed method directly. Their positions are deliberately mixed with unrelated tests.',
   },
   {
-    label: 'Authentication change',
-    brief: 'Changed <code>AuthTokenValidator</code>. Impact trace: Gateway → Auth → User profile.',
-    budget: 10,
-    impactPath: [
-      ['Gateway', false],
-      ['Auth', true],
-      ['User profile', false],
+    label: 'Round 2 · Stock reservation',
+    title: 'Prevent two customers from reserving the last item.',
+    ticket: 'The requested change is in <code>reserveStock()</code>. Find and click that production method.',
+    targetMethod: 'reserve-stock',
+    fullSuiteTests: 345,
+    fullSuiteDuration: 1200,
+    methods: [
+      { id: 'load-cart', name: 'loadCart()', area: 'Cart', summary: 'Loads the current basket.' },
+      { id: 'apply-discount', name: 'applyDiscount()', area: 'Pricing', summary: 'Applies a coupon to the order.' },
+      { id: 'reserve-stock', name: 'reserveStock()', area: 'Inventory', summary: 'Locks stock for one purchase.' },
+      { id: 'confirm-payment', name: 'confirmPayment()', area: 'Payments', summary: 'Confirms a completed payment.' },
+      { id: 'create-order', name: 'createOrder()', area: 'Orders', summary: 'Creates the customer order.' },
+      { id: 'send-receipt', name: 'sendReceipt()', area: 'Email', summary: 'Sends the purchase receipt.' },
+      { id: 'load-profile', name: 'loadProfile()', area: 'Account', summary: 'Loads a customer profile.' },
     ],
+    diff: {
+      before: 'stock[item] -= quantity;',
+      after: 'stock[item] = reserveAtomically(item, quantity);',
+      explanation: 'The reservation now happens as one safe operation. Tests that call reserveStock() can reveal whether two purchases still collide.',
+    },
     tests: [
-      ['TokenValidatorTest', 3, true],
-      ['GatewayAuthContractTest', 4, true],
-      ['UserSessionTest', 3, true],
-      ['CatalogSearchTest', 4, false],
-      ['InvoiceExportIT', 5, false],
-      ['EmailPreferencesTest', 2, false],
+      { id: 'coupon-total', name: 'coupon_changes_total()', duration: 13, touches: ['load-cart', 'apply-discount'] },
+      { id: 'last-item', name: 'last_item_has_one_winner()', duration: 34, touches: ['reserve-stock', 'create-order'] },
+      { id: 'payment-confirmed', name: 'payment_is_confirmed()', duration: 19, touches: ['confirm-payment'] },
+      { id: 'receipt-sent', name: 'receipt_is_sent()', duration: 17, touches: ['send-receipt'] },
+      { id: 'single-reservation', name: 'single_item_is_reserved()', duration: 14, touches: ['reserve-stock'] },
+      { id: 'profile-loads', name: 'profile_is_loaded()', duration: 12, touches: ['load-profile'] },
+      { id: 'checkout-stock', name: 'checkout_reserves_stock()', duration: 27, touches: ['load-cart', 'reserve-stock', 'confirm-payment', 'create-order'] },
     ],
-    explanation: 'Token, gateway-contract, and session tests follow the changed authentication path and fit the 10-second budget.',
+    resultExplanation: 'A focused unit test and two broader flows reach reserveStock(). Other checkout tests do not automatically become relevant.',
   },
   {
-    label: 'Pricing change',
-    brief: 'Changed <code>PricingRules.applyDiscount()</code>. Impact trace: Catalog → Pricing → Promotion.',
-    budget: 11,
-    impactPath: [
-      ['Catalog', false],
-      ['Pricing', true],
-      ['Promotion', false],
+    label: 'Round 3 · Indirect calls',
+    title: 'Follow a change through methods that call other methods.',
+    ticket: 'The requested change is in <code>roundMoney()</code>. Find and click that production method.',
+    targetMethod: 'round-money',
+    fullSuiteTests: 345,
+    fullSuiteDuration: 1200,
+    methods: [
+      { id: 'round-money', name: 'roundMoney()', area: 'Money', summary: 'Rounds a monetary value.' },
+      { id: 'calculate-total', name: 'calculateTotal()', area: 'Checkout', summary: 'Builds the final checkout total.', calls: ['round-money'] },
+      { id: 'invoice-total', name: 'invoiceTotal()', area: 'Billing', summary: 'Builds an invoice total.', calls: ['calculate-total'] },
+      { id: 'cart-preview', name: 'cartPreview()', area: 'Cart', summary: 'Shows the current total.', calls: ['calculate-total'] },
+      { id: 'reserve-stock', name: 'reserveStock()', area: 'Inventory', summary: 'Reserves purchased items.' },
+      { id: 'search-products', name: 'searchProducts()', area: 'Catalog', summary: 'Finds products in the catalog.' },
+      { id: 'send-email', name: 'sendEmail()', area: 'Email', summary: 'Sends a customer message.' },
     ],
+    diff: {
+      before: 'return Math.round(value * 100) / 100;',
+      after: 'return value.setScale(2, HALF_EVEN);',
+      explanation: 'The rounding rule changed. A test can reach it directly or through another production method.',
+    },
     tests: [
-      ['PricingRulesTest', 3, true],
-      ['PromotionContractTest', 4, true],
-      ['CatalogPriceFlowTest', 4, true],
-      ['ShippingEstimatorTest', 3, false],
-      ['AccountDeletionIT', 6, false],
-      ['AuditLogTest', 2, false],
+      { id: 'catalog-search', name: 'catalog_search_returns_items()', duration: 17, touches: ['search-products'] },
+      { id: 'invoice-rounding', name: 'invoice_uses_bankers_rounding()', duration: 29, touches: ['invoice-total'] },
+      { id: 'stock-reserved', name: 'stock_is_reserved()', duration: 14, touches: ['reserve-stock'] },
+      { id: 'checkout-rounding', name: 'checkout_total_is_rounded()', duration: 23, touches: ['calculate-total'] },
+      { id: 'email-sent', name: 'confirmation_email_is_sent()', duration: 16, touches: ['send-email'] },
+      { id: 'cart-rounding', name: 'cart_preview_matches_total()', duration: 20, touches: ['cart-preview'] },
+      { id: 'search-empty', name: 'empty_search_is_handled()', duration: 12, touches: ['search-products'] },
     ],
-    explanation: 'The three tests on the Catalog–Pricing–Promotion path provide targeted feedback in 11 seconds.',
+    resultExplanation: 'None of the three impacted tests calls roundMoney() directly. Their paths go through calculateTotal(), sometimes through another method first.',
+  },
+  {
+    label: 'Round 4 · Test lifecycle',
+    title: 'Remember what JUnit runs around each selected test.',
+    ticket: 'The requested change is in <code>seedAccount()</code>. Find and click that production method.',
+    targetMethod: 'seed-account',
+    fullSuiteTests: 345,
+    fullSuiteDuration: 1200,
+    methods: [
+      { id: 'seed-account', name: 'seedAccount()', area: 'Accounts', summary: 'Creates temporary account data.' },
+      { id: 'update-email', name: 'updateEmail()', area: 'Accounts', summary: 'Updates an account email.' },
+      { id: 'delete-account', name: 'deleteAccount()', area: 'Accounts', summary: 'Deletes an account.' },
+      { id: 'clear-temp', name: 'clearTempData()', area: 'Accounts', summary: 'Removes temporary data.' },
+      { id: 'export-orders', name: 'exportOrders()', area: 'Orders', summary: 'Exports order history.' },
+      { id: 'filter-catalog', name: 'filterCatalog()', area: 'Catalog', summary: 'Filters catalog items.' },
+      { id: 'send-receipt', name: 'sendReceipt()', area: 'Email', summary: 'Sends a receipt.' },
+    ],
+    diff: {
+      before: 'account.status = ACTIVE;',
+      after: 'account.activate(clock.now());',
+      explanation: 'The shared account fixture changed. Trace both normal test calls and automatic lifecycle calls.',
+    },
+    tests: [
+      { id: 'orders-export', name: 'orders_can_be_exported()', duration: 18, touches: ['export-orders'] },
+      { id: 'email-update', name: 'email_can_be_updated()', duration: 22, touches: ['update-email'], hooks: ['account-setup', 'account-teardown'] },
+      { id: 'account-setup', name: '@BeforeEach setUpAccount()', automatic: true, touches: ['seed-account'] },
+      { id: 'catalog-filter', name: 'catalog_can_be_filtered()', duration: 14, touches: ['filter-catalog'] },
+      { id: 'account-teardown', name: '@AfterEach tearDownAccount()', automatic: true, touches: ['clear-temp'] },
+      { id: 'account-delete', name: 'account_can_be_deleted()', duration: 24, touches: ['delete-account'], hooks: ['account-setup', 'account-teardown'] },
+      { id: 'receipt-sent', name: 'receipt_is_sent()', duration: 13, touches: ['send-receipt'] },
+    ],
+    resultExplanation: 'The two selected tests do not call seedAccount() themselves. JUnit runs @BeforeEach before each of them, so the fixture creates the missing path. Lifecycle nodes are automatic, not selectable.',
+  },
+  {
+    label: 'Round 5 · Cosmetic change',
+    title: 'Decide whether a code edit can change behaviour at all.',
+    ticket: 'A maintenance edit was made inside <code>calculateShipping()</code>. Find and click that production method.',
+    targetMethod: 'calculate-shipping',
+    semanticImpact: false,
+    fullSuiteTests: 345,
+    fullSuiteDuration: 1200,
+    methods: [
+      { id: 'calculate-shipping', name: 'calculateShipping()', area: 'Delivery', summary: 'Calculates the delivery price.' },
+      { id: 'checkout-total', name: 'checkoutTotal()', area: 'Checkout', summary: 'Builds the checkout total.', calls: ['calculate-shipping'] },
+      { id: 'express-price', name: 'expressPrice()', area: 'Delivery', summary: 'Shows the express price.', calls: ['calculate-shipping'] },
+      { id: 'reserve-stock', name: 'reserveStock()', area: 'Inventory', summary: 'Reserves purchased items.' },
+      { id: 'load-profile', name: 'loadProfile()', area: 'Account', summary: 'Loads customer details.' },
+      { id: 'send-receipt', name: 'sendReceipt()', area: 'Email', summary: 'Sends a receipt.' },
+      { id: 'apply-tax', name: 'applyTax()', area: 'Pricing', summary: 'Adds tax to a price.' },
+    ],
+    diff: {
+      before: 'double x = weight * rate;',
+      after: 'double shippingCost = weight * rate;',
+      explanation: 'The implementation now uses a clearer local variable name. Decide what that means for test execution.',
+    },
+    tests: [
+      { id: 'shipping-price', name: 'shipping_price_is_calculated()', duration: 16, touches: ['calculate-shipping'] },
+      { id: 'profile-loads', name: 'profile_is_loaded()', duration: 12, touches: ['load-profile'] },
+      { id: 'receipt-sent', name: 'receipt_is_sent()', duration: 15, touches: ['send-receipt'] },
+      { id: 'checkout-shipping', name: 'checkout_includes_shipping()', duration: 25, touches: ['checkout-total'] },
+      { id: 'tax-applied', name: 'tax_is_applied()', duration: 14, touches: ['apply-tax'] },
+      { id: 'stock-reserved', name: 'stock_is_reserved()', duration: 13, touches: ['reserve-stock'] },
+      { id: 'express-shipping', name: 'express_shipping_is_priced()', duration: 21, touches: ['express-price'] },
+    ],
+    resultExplanation: 'The bytecode-normalized behaviour is unchanged: only a local variable name changed. CATTO ignores this cosmetic edit, so the smallest safe set contains zero tests.',
+  },
+  {
+    label: 'Bonus · Java hierarchy',
+    title: 'Trace a superclass call without confusing it with static hiding.',
+    ticket: 'The requested change is in <code>BaseFormatter.format()</code>. Find and click that production method.',
+    targetMethod: 'base-format',
+    fullSuiteTests: 345,
+    fullSuiteDuration: 1200,
+    methods: [
+      { id: 'base-format', name: 'BaseFormatter.format()', area: 'Superclass', summary: 'Formats a base document.' },
+      { id: 'invoice-format', name: 'InvoiceFormatter.format()', area: 'Subclass', summary: 'Extends the base format.', calls: ['base-format'], relation: 'super.format()' },
+      { id: 'receipt-format', name: 'ReceiptFormatter.format()', area: 'Subclass', summary: 'Replaces the base format without calling super.' },
+      { id: 'base-label', name: 'BaseFormatter.label()', area: 'Superclass · static', summary: 'Returns the base static label.' },
+      { id: 'invoice-label', name: 'InvoiceFormatter.label()', area: 'Subclass · static', summary: 'Hides the base static label.' },
+      { id: 'export-document', name: 'exportDocument()', area: 'Documents', summary: 'Exports a formatted document.', calls: ['invoice-format'] },
+      { id: 'send-document', name: 'sendDocument()', area: 'Email', summary: 'Sends a document.' },
+    ],
+    diff: {
+      before: 'return header + body;',
+      after: 'return header + sanitize(body);',
+      explanation: 'The superclass implementation changed. Follow explicit super calls and keep static methods separate.',
+    },
+    tests: [
+      { id: 'receipt-format-test', name: 'receipt_is_formatted()', duration: 15, touches: ['receipt-format'] },
+      { id: 'invoice-export-test', name: 'invoice_export_is_formatted()', duration: 27, touches: ['export-document'] },
+      { id: 'invoice-static-label', name: 'invoice_static_label_is_used()', duration: 12, touches: ['invoice-label'] },
+      { id: 'base-format-test', name: 'base_document_is_formatted()', duration: 18, touches: ['base-format'] },
+      { id: 'mail-test', name: 'document_email_is_sent()', duration: 14, touches: ['send-document'] },
+      { id: 'base-static-label', name: 'base_static_label_is_used()', duration: 11, touches: ['base-label'] },
+      { id: 'receipt-static-check', name: 'receipt_label_is_stable()', duration: 13, touches: ['invoice-label'] },
+    ],
+    resultExplanation: 'invoice_export_is_formatted() reaches BaseFormatter.format() through super.format(); the direct base test is also relevant. ReceiptFormatter replaces the method without calling super. Static label methods are hidden, not overridden, and do not reach this instance-method change.',
   },
 ];
 
@@ -492,21 +628,140 @@ const renderCouplingGraph = (graph) => {
   return '';
 };
 
-const renderImpactGraph = (impactPath) => {
-  const nodes = impactPath.map(([label, isChanged], index) => `
-    ${index ? '<span class="impact-arrow" aria-hidden="true">→</span>' : ''}
-    <div class="impact-node${isChanged ? ' is-changed' : ''}">
-      ${isChanged ? '<span>Changed</span>' : '<span>Impacted</span>'}
-      <strong>${label}</strong>
-    </div>
+const formatTestingDuration = (seconds) => {
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  const remainder = seconds % 60;
+  return remainder ? `${minutes}m ${remainder}s` : `${minutes}m`;
+};
+
+const getSelectableTests = (round) => round.tests.filter((test) => !test.automatic);
+
+const findMethodPath = (round, fromId, targetId, visited = new Set()) => {
+  if (fromId === targetId) return [fromId];
+  if (visited.has(fromId)) return null;
+  const nextVisited = new Set(visited).add(fromId);
+  const method = round.methods.find((item) => item.id === fromId);
+  if (!method) return null;
+
+  for (const calledId of method.calls || []) {
+    const path = findMethodPath(round, calledId, targetId, nextVisited);
+    if (path) return [fromId, ...path];
+  }
+  return null;
+};
+
+const getTestStartMethods = (round, test) => {
+  const hookMethods = (test.hooks || []).flatMap((hookId) => (
+    round.tests.find((item) => item.id === hookId)?.touches || []
+  ));
+  return [...new Set([...(test.touches || []), ...hookMethods])];
+};
+
+const getTestImpactPaths = (round, test) => {
+  if (round.semanticImpact === false || test.automatic) return [];
+  return getTestStartMethods(round, test)
+    .map((methodId) => findMethodPath(round, methodId, round.targetMethod))
+    .filter(Boolean);
+};
+
+const isTestImpacted = (round, test) => getTestImpactPaths(round, test).length > 0;
+
+const getReachableCallPairs = (round, startIds) => {
+  const pairs = new Set();
+  const visited = new Set();
+  const visit = (methodId) => {
+    if (visited.has(methodId)) return;
+    visited.add(methodId);
+    const method = round.methods.find((item) => item.id === methodId);
+    (method?.calls || []).forEach((calledId) => {
+      pairs.add(`${methodId}|${calledId}`);
+      visit(calledId);
+    });
+  };
+  startIds.forEach(visit);
+  return pairs;
+};
+
+const renderMethodTestGraph = (round) => {
+  const rowHeight = 72;
+  const rowCount = Math.max(round.methods.length, round.tests.length);
+  const height = rowCount * rowHeight;
+  const methodIndex = Object.fromEntries(round.methods.map((method, index) => [method.id, index]));
+  const methodNames = Object.fromEntries(round.methods.map((method) => [method.id, method.name]));
+  const testIndex = Object.fromEntries(round.tests.map((test, index) => [test.id, index]));
+  const directEdges = round.tests.flatMap((test, testRow) => (test.touches || []).map((methodId) => {
+    const methodRow = methodIndex[methodId];
+    const methodY = (methodRow * rowHeight) + (rowHeight / 2);
+    const testY = (testRow * rowHeight) + (rowHeight / 2);
+    return `<path class="method-test-edge${test.automatic ? ' is-automatic-edge' : ''}" data-edge-test="${test.id}" data-edge-method="${methodId}" d="M 0 ${methodY} C 58 ${methodY}, 122 ${testY}, 180 ${testY}"></path>`;
+  })).join('');
+  const methodCallEdges = round.methods.flatMap((method, methodRow) => (method.calls || []).map((calledId) => {
+    const calledRow = methodIndex[calledId];
+    const fromY = (methodRow * rowHeight) + (rowHeight / 2);
+    const toY = (calledRow * rowHeight) + (rowHeight / 2);
+    return `<path class="production-call-edge" data-call-from="${method.id}" data-call-to="${calledId}" d="M 0 ${fromY} C 48 ${fromY}, 48 ${toY}, 0 ${toY}"></path>`;
+  })).join('');
+  const lifecycleEdges = round.tests.flatMap((test, testRow) => (test.hooks || []).map((hookId) => {
+    const hookRow = testIndex[hookId];
+    const fromY = (testRow * rowHeight) + (rowHeight / 2);
+    const toY = (hookRow * rowHeight) + (rowHeight / 2);
+    return `<path class="test-lifecycle-edge" data-edge-test="${test.id}" data-edge-hook="${hookId}" d="M 180 ${fromY} C 132 ${fromY}, 132 ${toY}, 180 ${toY}"></path>`;
+  })).join('');
+  const methodNodes = round.methods.map((method) => `
+    <button class="production-method" type="button" data-production-method="${method.id}" aria-label="Production method ${method.name}. ${method.summary}">
+      <span>${method.area}${method.calls?.length ? ` · ${method.relation || `calls ${method.calls.map((id) => methodNames[id]).join(' + ')}`}` : ''}</span>
+      <strong>${method.name}</strong>
+    </button>
   `).join('');
-  const accessiblePath = impactPath.map(([label, isChanged]) => `${label}${isChanged ? ', changed component' : ', impacted component'}`).join(' to ');
+  const testNodes = round.tests.map((test) => test.automatic ? `
+    <button class="test-method is-automatic" type="button" data-test-hook="${test.id}" disabled>
+      <span>Runs automatically · lifecycle</span>
+      <strong>${test.name}</strong>
+    </button>
+  ` : `
+    <button class="test-method" type="button" data-test-method="${test.id}" aria-pressed="false" disabled>
+      <span>${test.duration}s · calls ${test.touches.length} ${test.touches.length === 1 ? 'method' : 'methods'}${test.hooks?.length ? ' + lifecycle' : ''}</span>
+      <strong>${test.name}</strong>
+    </button>
+  `).join('');
+  const hasIndirectCalls = round.methods.some((method) => method.calls?.length);
+  const hasLifecycle = round.tests.some((test) => test.automatic);
 
   return `
-    <figure class="research-graph impact-graph" aria-label="Change impact path: ${accessiblePath}">
-      <div class="graph-title"><span>Change impact pattern</span><span>Follow the path</span></div>
-      <div class="impact-track">${nodes}</div>
-    </figure>
+    <section class="method-test-panel" aria-labelledby="method-test-title">
+      <div class="method-test-heading">
+        <div>
+          <p class="game-scenario-label">Code map</p>
+          <h5 id="method-test-title">Which test paths can reach the changed method?</h5>
+        </div>
+        <div class="method-test-legend" aria-label="Definitions">
+          <span><strong>Production method</strong> code used by the application</span>
+          <span><strong>Test method</strong> an automated check that calls production code</span>
+        </div>
+      </div>
+      ${(hasIndirectCalls || hasLifecycle) ? `
+        <div class="method-test-path-legend" aria-label="Path types">
+          <span class="is-direct">Test calls production</span>
+          ${hasIndirectCalls ? '<span class="is-indirect">Production method calls another method</span>' : ''}
+          ${hasLifecycle ? '<span class="is-lifecycle">JUnit runs this lifecycle path automatically</span>' : ''}
+        </div>
+      ` : ''}
+      <p class="method-test-mobile-hint">Swipe sideways to explore the complete map.</p>
+      <div class="method-test-scroll">
+        <div class="method-test-graph" style="--graph-rows: ${rowCount}">
+          <div class="method-test-column method-column">
+            <p>Production methods</p>
+            <div class="method-test-nodes">${methodNodes}</div>
+          </div>
+          <svg class="method-test-lines" viewBox="0 0 180 ${height}" preserveAspectRatio="none" aria-hidden="true">${directEdges}${methodCallEdges}${lifecycleEdges}</svg>
+          <div class="method-test-column test-column">
+            <p>Test methods</p>
+            <div class="method-test-nodes">${testNodes}</div>
+          </div>
+        </div>
+      </div>
+    </section>
   `;
 };
 
@@ -1536,96 +1791,318 @@ const renderCouplingLabEntry = (stage) => {
   focusGameHeading(stage);
 };
 
-const renderTestingResult = (stage, score) => {
-  const message = score >= 8
-    ? 'Excellent selection: high relevance, low latency, and no wasted feedback time.'
-    : score >= 5
-      ? 'A solid test strategy. Tightening the impact trace would save a little more time.'
-      : 'You protected coverage, but the suite can be more selective. Follow the changed dependencies first.';
+const testingStoryTimers = new WeakMap();
+
+const testingStoryScenes = [
+  { kicker: 'A tiny change', line: 'Alex edits half a line of production code.', accent: 'The fix takes seconds.', duration: 2200 },
+  { kicker: 'The pipeline wakes up', line: '345 automated tests start running.', accent: 'Every test. Every time.', duration: 2200 },
+  { kicker: 'Estimated wait', line: '20 minutes.', accent: 'For half a line.', duration: 2400 },
+  { kicker: 'The next day', line: 'Another tiny change. Another full pipeline.', accent: 'Alex waits again.', duration: 2400 },
+  { kicker: 'The real question', line: 'Did all 345 tests need to run?', accent: 'Or only the tests that touch the change?', duration: 3000 },
+  { kicker: 'Your turn', line: 'Trace the change.', accent: 'Run the smallest safe test set.', duration: 2600 },
+];
+
+const newTestingProgress = () => ({ score: 0, safeRounds: 0, totalDuration: 0, totalBaseline: 0 });
+
+const clearTestingStory = (stage) => {
+  const timer = testingStoryTimers.get(stage);
+  if (timer) window.clearTimeout(timer);
+  testingStoryTimers.delete(stage);
+};
+
+const renderTestingStory = (stage) => {
+  clearTestingStory(stage);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    renderTestingRound(stage, 0, newTestingProgress());
+    return;
+  }
 
   stage.innerHTML = `
-    <div class="game-result">
-      <div class="game-result-mark" aria-hidden="true">${score}/9</div>
-      <h4 tabindex="-1" data-game-focus>Pipeline complete.</h4>
-      <p>${message}</p>
-      <button class="game-button" type="button" data-game-restart>Build another suite</button>
+    <div class="lab-story pipeline-story" tabindex="-1" data-game-focus aria-label="A short story about a developer waiting for an unnecessarily large test suite">
+      <button class="lab-story-skip" type="button" data-story-skip>Skip intro</button>
+      <div class="lab-story-frame" data-story-content role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="lab-story-progress" aria-hidden="true"><span data-story-progress></span></div>
     </div>
   `;
-  stage.querySelector('[data-game-restart]').addEventListener('click', () => renderTestingRound(stage, 0, 0));
+
+  let sceneIndex = 0;
+  const content = stage.querySelector('[data-story-content]');
+  const progress = stage.querySelector('[data-story-progress]');
+
+  const startChallenge = () => {
+    clearTestingStory(stage);
+    renderTestingRound(stage, 0, newTestingProgress());
+  };
+  const showScene = () => {
+    const scene = testingStoryScenes[sceneIndex];
+    content.innerHTML = `
+      <div class="lab-story-scene">
+        <p>${scene.kicker}</p>
+        <h4>${scene.line}</h4>
+        <strong>${scene.accent}</strong>
+      </div>
+    `;
+    progress.style.width = `${((sceneIndex + 1) / testingStoryScenes.length) * 100}%`;
+    const timer = window.setTimeout(() => {
+      sceneIndex += 1;
+      if (sceneIndex >= testingStoryScenes.length) startChallenge();
+      else showScene();
+    }, scene.duration);
+    testingStoryTimers.set(stage, timer);
+  };
+
+  stage.querySelector('[data-story-skip]').addEventListener('click', startChallenge);
+  showScene();
   focusGameHeading(stage);
 };
 
-const renderTestingRound = (stage, roundIndex, score) => {
-  const round = testingRounds[roundIndex];
-  const testItems = round.tests.map(([name, duration], index) => `
-    <li class="test-option">
-      <label>
-        <input type="checkbox" value="${index}" data-test-option>
-        <span>${name}</span>
-        <span>${duration}s</span>
-      </label>
-    </li>
-  `).join('');
+const renderTestingResult = (stage, progress) => {
+  const saved = progress.totalBaseline - progress.totalDuration;
+  const safeEveryTime = progress.safeRounds === testingRounds.length;
+  const message = safeEveryTime
+    ? 'You kept every impacted test and removed the waiting that added no protection.'
+    : 'You made the pipeline faster, but speed only helps when every test that can detect the change is still included.';
 
   stage.innerHTML = `
-    <form class="game-round" data-test-form>
-      ${renderProgress(roundIndex, testingRounds.length, score, testingRounds.length * 3)}
+    <div class="game-result testing-result">
+      <div class="game-result-mark" aria-hidden="true">${progress.safeRounds}/${testingRounds.length}</div>
+      <p class="game-scenario-label">Pipeline complete</p>
+      <h4 tabindex="-1" data-game-focus>${safeEveryTime ? 'Fast and safe.' : 'Fast, with a safety gap.'}</h4>
+      <p>${message}</p>
+      <div class="testing-result-metrics">
+        <div><span>Safe selections</span><strong>${progress.safeRounds} of ${testingRounds.length}</strong></div>
+        <div><span>Selected test time</span><strong>${formatTestingDuration(progress.totalDuration)}</strong></div>
+        <div><span>Time saved</span><strong>${formatTestingDuration(saved)}</strong></div>
+      </div>
+      <p class="testing-takeaway"><strong>The idea:</strong> trace which tests execute the changed production code, then run the smallest set that preserves that evidence.</p>
+      <button class="game-button" type="button" data-game-restart>Start again</button>
+    </div>
+  `;
+  stage.querySelector('[data-game-restart]').addEventListener('click', () => renderTestingRound(stage, 0, newTestingProgress()));
+  focusGameHeading(stage);
+};
+
+const renderTestingRound = (stage, roundIndex, progress) => {
+  clearTestingStory(stage);
+  const round = testingRounds[roundIndex];
+
+  stage.innerHTML = `
+    <form class="game-round testing-round" data-test-form>
+      ${renderProgress(roundIndex, testingRounds.length, progress.score, testingRounds.length * 3)}
       <p class="game-scenario-label">${round.label}</p>
-      <div class="change-brief">${round.brief}</div>
-      ${renderImpactGraph(round.impactPath)}
-      <fieldset class="test-fieldset">
-        <legend class="game-question" tabindex="-1" data-game-focus>Which tests should run?</legend>
-        <div class="budget-row">
-          <span>Budget: ${round.budget}s</span>
-          <span class="budget-value" data-budget-value aria-live="polite">Selected: 0s</span>
-        </div>
-        <ul class="test-list">${testItems}</ul>
-      </fieldset>
+      <h4 class="testing-round-title" tabindex="-1" data-game-focus>${round.title}</h4>
+      <div class="testing-steps" aria-label="How to play">
+        <div class="testing-step is-active" data-testing-step="change"><span>1</span><p><strong>Make the change</strong>Click the production method named in the ticket.</p></div>
+        <div class="testing-step" data-testing-step="tests"><span>2</span><p><strong>Trace the impact</strong>Select every test whose path can reach the change.</p></div>
+        <div class="testing-step" data-testing-step="run"><span>3</span><p><strong>Run the tests</strong>Check safety and time saved.</p></div>
+      </div>
+      <div class="change-brief testing-ticket"><span>Change request</span><p>${round.ticket}</p></div>
+      ${renderMethodTestGraph(round)}
+      <div class="testing-diff is-hidden" data-testing-diff aria-live="polite">
+        <div class="testing-diff-heading"><span>Simulated edit</span><strong data-diff-method></strong></div>
+        <code class="diff-line is-removed">− ${round.diff.before}</code>
+        <code class="diff-line is-added">+ ${round.diff.after}</code>
+        <p>${round.diff.explanation}</p>
+      </div>
+      <div class="testing-selection-summary" aria-live="polite">
+        <div><span>Full suite</span><strong>${round.fullSuiteTests} tests · ${formatTestingDuration(round.fullSuiteDuration)}</strong></div>
+        <div><span>Your selection</span><strong data-selected-time>Choose a method first</strong></div>
+        <div><span>Projected saving</span><strong data-saved-time>—</strong></div>
+      </div>
+      <p class="testing-status" data-testing-status role="status">Start with step 1: click the production method requested in the ticket.</p>
       <button class="game-button" type="submit" data-test-submit disabled>Run selected tests</button>
       <div aria-live="polite" data-game-feedback></div>
     </form>
   `;
 
   const form = stage.querySelector('[data-test-form]');
-  const inputs = [...stage.querySelectorAll('[data-test-option]')];
-  const budgetValue = stage.querySelector('[data-budget-value]');
+  const methodButtons = [...stage.querySelectorAll('[data-production-method]')];
+  const testButtons = [...stage.querySelectorAll('[data-test-method]')];
+  const hookButtons = [...stage.querySelectorAll('[data-test-hook]')];
+  const selectableTests = getSelectableTests(round);
   const submitButton = stage.querySelector('[data-test-submit]');
+  const status = stage.querySelector('[data-testing-status]');
+  const selectedTime = stage.querySelector('[data-selected-time]');
+  const savedTime = stage.querySelector('[data-saved-time]');
+  const diff = stage.querySelector('[data-testing-diff]');
   const feedback = stage.querySelector('[data-game-feedback]');
+  const selectedTests = new Set();
+  let changeApplied = false;
+  let complete = false;
 
-  const updateBudget = () => {
-    const duration = inputs.reduce((total, input) => total + (input.checked ? round.tests[Number(input.value)][1] : 0), 0);
-    budgetValue.textContent = `Selected: ${duration}s`;
-    budgetValue.classList.toggle('is-over', duration > round.budget);
-    submitButton.disabled = !inputs.some((input) => input.checked);
+  const setStep = (step) => {
+    stage.querySelectorAll('[data-testing-step]').forEach((item) => {
+      const itemStep = item.dataset.testingStep;
+      item.classList.toggle('is-active', itemStep === step);
+      item.classList.toggle('is-complete', (step === 'tests' && itemStep === 'change') || (step === 'run' && itemStep !== 'run'));
+    });
+  };
+  const getSelectedDuration = () => round.tests.reduce((total, test) => (
+    total + (selectedTests.has(test.id) ? (test.duration || 0) : 0)
+  ), 0);
+  const setEdgeClass = (selector, className, enabled = true) => {
+    stage.querySelectorAll(selector).forEach((edge) => edge.classList.toggle(className, enabled));
+  };
+  const updateGraphSelection = () => {
+    stage.querySelectorAll('.method-test-edge, .production-call-edge, .test-lifecycle-edge')
+      .forEach((edge) => edge.classList.remove('is-selected'));
+    hookButtons.forEach((button) => button.classList.remove('is-selected'));
+
+    const activeHooks = new Set();
+    const activeCallPairs = new Set();
+    selectedTests.forEach((testId) => {
+      const test = selectableTests.find((item) => item.id === testId);
+      if (!test) return;
+      setEdgeClass(`[data-edge-test="${test.id}"]`, 'is-selected');
+      (test.hooks || []).forEach((hookId) => {
+        activeHooks.add(hookId);
+        setEdgeClass(`[data-edge-test="${hookId}"]`, 'is-selected');
+      });
+      getReachableCallPairs(round, getTestStartMethods(round, test)).forEach((pair) => activeCallPairs.add(pair));
+    });
+    activeHooks.forEach((hookId) => stage.querySelector(`[data-test-hook="${hookId}"]`)?.classList.add('is-selected'));
+    activeCallPairs.forEach((pair) => {
+      const [fromId, toId] = pair.split('|');
+      setEdgeClass(`[data-call-from="${fromId}"][data-call-to="${toId}"]`, 'is-selected');
+    });
+  };
+  const updateSelection = () => {
+    const duration = getSelectedDuration();
+    selectedTime.textContent = `${selectedTests.size} ${selectedTests.size === 1 ? 'test' : 'tests'} · ${formatTestingDuration(duration)}`;
+    savedTime.textContent = formatTestingDuration(round.fullSuiteDuration - duration);
+    submitButton.disabled = !changeApplied;
+    status.textContent = selectedTests.size
+      ? `${selectedTests.size} ${selectedTests.size === 1 ? 'test selected' : 'tests selected'}. Run them when your set feels safe.`
+      : 'Trace the paths, then run the set you believe is necessary. A zero-test selection is allowed.';
   };
 
-  inputs.forEach((input) => input.addEventListener('change', updateBudget));
+  methodButtons.forEach((button) => button.addEventListener('click', () => {
+    if (complete || changeApplied) return;
+    const method = round.methods.find((item) => item.id === button.dataset.productionMethod);
+    if (method.id !== round.targetMethod) {
+      button.classList.add('is-wrong');
+      status.textContent = `That is ${method.name}. The change request asks for ${round.methods.find((item) => item.id === round.targetMethod).name}.`;
+      window.setTimeout(() => button.classList.remove('is-wrong'), 650);
+      return;
+    }
+
+    changeApplied = true;
+    button.classList.add('is-changed');
+    button.setAttribute('aria-pressed', 'true');
+    methodButtons.forEach((item) => { item.disabled = true; });
+    testButtons.forEach((item) => { item.disabled = false; });
+    diff.classList.remove('is-hidden');
+    diff.querySelector('[data-diff-method]').textContent = method.name;
+    setStep('tests');
+    updateSelection();
+  }));
+
+  testButtons.forEach((button) => button.addEventListener('click', () => {
+    if (complete || !changeApplied) return;
+    const testId = button.dataset.testMethod;
+    if (selectedTests.has(testId)) selectedTests.delete(testId);
+    else selectedTests.add(testId);
+    const isSelected = selectedTests.has(testId);
+    button.classList.toggle('is-selected', isSelected);
+    button.setAttribute('aria-pressed', String(isSelected));
+    updateGraphSelection();
+    updateSelection();
+  }));
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const selected = inputs.filter((input) => input.checked).map((input) => Number(input.value));
-    const duration = selected.reduce((total, index) => total + round.tests[index][1], 0);
-    const relevantSelected = selected.filter((index) => round.tests[index][2]).length;
-    const unnecessarySelected = selected.filter((index) => !round.tests[index][2]).length;
-    const overBudget = duration > round.budget;
-    const roundScore = Math.max(0, relevantSelected - unnecessarySelected - (overBudget ? 1 : 0));
-    const nextScore = score + roundScore;
-    const resultLead = roundScore === 3 ? 'Optimal selection.' : roundScore >= 2 ? 'Good coverage.' : 'The signal is noisy.';
+    if (complete) return;
+    complete = true;
+    const relevantTests = selectableTests.filter((test) => isTestImpacted(round, test));
+    const missed = relevantTests.filter((test) => !selectedTests.has(test.id));
+    const extra = selectableTests.filter((test) => selectedTests.has(test.id) && !isTestImpacted(round, test));
+    const safe = missed.length === 0;
+    const roundScore = safe && extra.length === 0 ? 3 : safe && extra.length === 1 ? 2 : safe ? 1 : selectedTests.size ? 1 : 0;
+    const duration = getSelectedDuration();
+    const saved = round.fullSuiteDuration - duration;
+    const nextProgress = {
+      score: progress.score + roundScore,
+      safeRounds: progress.safeRounds + (safe ? 1 : 0),
+      totalDuration: progress.totalDuration + duration,
+      totalBaseline: progress.totalBaseline + round.fullSuiteDuration,
+    };
+    const cosmeticMistake = round.semanticImpact === false && selectedTests.size > 0;
+    const resultLead = cosmeticMistake
+      ? 'No tests were needed.'
+      : safe && extra.length === 0
+        ? 'Smallest safe set.'
+        : safe
+          ? 'Safe, but slower than necessary.'
+          : 'Risky selection.';
+    const safetyCopy = relevantTests.length === 0
+      ? 'No test can observe a behavioural difference in this change.'
+      : safe
+        ? `All ${relevantTests.length} impacted tests are included.`
+      : `${missed.length} impacted ${missed.length === 1 ? 'test is' : 'tests are'} missing: ${missed.map((test) => test.name).join(', ')}.`;
+    const speedCopy = extra.length
+      ? `${extra.length} unrelated ${extra.length === 1 ? 'test adds' : 'tests add'} time without checking this change.`
+      : 'No unrelated tests were added.';
 
-    inputs.forEach((input) => { input.disabled = true; });
+    methodButtons.forEach((button) => { button.disabled = true; });
+    testButtons.forEach((button) => {
+      button.disabled = true;
+      const test = selectableTests.find((item) => item.id === button.dataset.testMethod);
+      const relevant = isTestImpacted(round, test);
+      button.classList.toggle('is-covered', relevant && selectedTests.has(test.id));
+      button.classList.toggle('is-missed', relevant && !selectedTests.has(test.id));
+      button.classList.toggle('is-extra', !relevant && selectedTests.has(test.id));
+    });
+    stage.querySelectorAll('.method-test-edge, .production-call-edge, .test-lifecycle-edge')
+      .forEach((edge) => edge.classList.remove('is-selected', 'is-covered', 'is-missed', 'is-extra'));
+    hookButtons.forEach((button) => button.classList.remove('is-selected', 'is-covered', 'is-missed', 'is-extra'));
+
+    const pathStates = new Map();
+    const setPathState = (selector, stateName) => {
+      stage.querySelectorAll(selector).forEach((edge) => {
+        const priority = { 'is-extra': 1, 'is-covered': 2, 'is-missed': 3 };
+        const current = pathStates.get(edge) || 'is-extra';
+        if (!pathStates.has(edge) || priority[stateName] > priority[current]) pathStates.set(edge, stateName);
+      });
+    };
+    selectableTests.forEach((test) => {
+      const relevant = isTestImpacted(round, test);
+      const selected = selectedTests.has(test.id);
+      if (!relevant && !selected) return;
+      const stateName = relevant ? (selected ? 'is-covered' : 'is-missed') : 'is-extra';
+      setPathState(`[data-edge-test="${test.id}"]`, stateName);
+      (test.hooks || []).forEach((hookId) => {
+        setPathState(`[data-edge-test="${hookId}"]`, stateName);
+        stage.querySelector(`[data-test-hook="${hookId}"]`)?.classList.add(stateName);
+      });
+      const visiblePaths = relevant
+        ? getTestImpactPaths(round, test)
+        : getTestStartMethods(round, test).map((methodId) => findMethodPath(round, methodId, round.targetMethod)).filter(Boolean);
+      visiblePaths.forEach((path) => {
+        path.slice(0, -1).forEach((fromId, index) => {
+          const toId = path[index + 1];
+          setPathState(`[data-call-from="${fromId}"][data-call-to="${toId}"]`, stateName);
+        });
+      });
+    });
+    pathStates.forEach((stateName, edge) => edge.classList.add(stateName));
+    setStep('run');
+    status.textContent = `${resultLead} ${safetyCopy}`;
     submitButton.remove();
     feedback.innerHTML = `
-        <p class="game-feedback"><strong>${resultLead} +${roundScore} ${roundScore === 1 ? 'point' : 'points'}.</strong> ${round.explanation}${overBudget ? ` Your ${duration}-second selection exceeded the budget.` : ''}${unnecessarySelected ? ` ${unnecessarySelected} unrelated ${unnecessarySelected === 1 ? 'test added' : 'tests added'} avoidable delay.` : ''}</p>
-      <button class="game-button game-next" type="button" data-game-next>${roundIndex === testingRounds.length - 1 ? 'See result' : 'Next change'}</button>
+      <div class="game-feedback testing-feedback">
+        <div><strong>${resultLead}</strong><span>${safetyCopy} ${speedCopy} ${round.resultExplanation || ''}</span></div>
+        <div class="testing-feedback-metrics">
+          <span><small>Safety</small><strong>${safe ? 'Covered' : 'Gap found'}</strong></span>
+          <span><small>Selected</small><strong>${formatTestingDuration(duration)}</strong></span>
+          <span><small>Time saved</small><strong>${formatTestingDuration(saved)}</strong></span>
+        </div>
+      </div>
+      <button class="game-button game-next" type="button" data-game-next>${roundIndex === testingRounds.length - 1 ? 'See final result' : 'Next change'}</button>
     `;
     const nextButton = feedback.querySelector('[data-game-next]');
     nextButton.addEventListener('click', () => {
-      if (roundIndex === testingRounds.length - 1) {
-        renderTestingResult(stage, nextScore);
-      } else {
-        renderTestingRound(stage, roundIndex + 1, nextScore);
-        focusGameHeading(stage);
-      }
+      if (roundIndex === testingRounds.length - 1) renderTestingResult(stage, nextProgress);
+      else renderTestingRound(stage, roundIndex + 1, nextProgress);
     });
     nextButton.focus();
   });
@@ -1642,7 +2119,7 @@ document.querySelectorAll('[data-game]').forEach((game) => {
     if (game.dataset.game === 'coupling') {
       renderCouplingLabStory(stage);
     } else if (game.dataset.game === 'testing') {
-      renderTestingRound(stage, 0, 0);
+      renderTestingStory(stage);
     }
   });
 });
